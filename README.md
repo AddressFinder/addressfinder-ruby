@@ -6,7 +6,7 @@ A client library for accessing the AddressFinder APIs.
 
 Add this line to your application's Gemfile:
 
-    gem 'addressfinder
+    gem 'addressfinder'
 
 And then execute:
 
@@ -27,7 +27,7 @@ is normally performed in an initializer file. For example `./config/initializers
       # Mandatory configuration
       af.api_key = 'XXXXXXXXXX'
       af.api_secret = 'YYYYYYYYYY'
-      af.country = 'nz'
+      af.default_country = 'nz'
 
       # Optional configuration
       af.timeout = 10 # seconds
