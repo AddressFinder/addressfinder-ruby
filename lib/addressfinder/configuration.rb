@@ -9,7 +9,7 @@ module AddressFinder
     attr_accessor :proxy_user
     attr_accessor :proxy_password
     attr_accessor :timeout
-    attr_accessor :country
+    attr_accessor :default_country
 
     def initialize
       self.hostname = 'api.addressfinder.io'

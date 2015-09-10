@@ -10,15 +10,13 @@ module AddressFinder
       @params['format'] = 'json'
       @params['key'] = config.api_key
       @params['secret'] = config.api_secret
-      @country = country || config.country
+      @country = country || config.default_country
     end
 
     def perform
       build_request
       execute_request
-      create_result
-
-      result
+      build_result
     end
 
     private
@@ -44,16 +42,16 @@ module AddressFinder
       @response_status = response.code
     end
 
-    def create_result
+    def build_result
       if response_status != '200'
         raise AddressFinder::RequestRejectedError.new(@response_status, @response_body)
       end
 
       if response_hash['matched']
-        @result = Result.new(response_hash)
-      else
-        @result = nil
+        return Result.new(response_hash)
       end
+
+      nil
     end
 
     def encoded_params
