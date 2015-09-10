@@ -37,6 +37,8 @@ is normally performed in an initializer file. For example `./config/initializers
       af.proxy_password = 'password'
     end
 
+You can obtain your API key and secret from the AddressFinder Portal.
+
 ### Address Cleansing
 
 See the documentation on the available parameters and expected response here:
@@ -48,7 +50,26 @@ Usage example:
     result = AddressFinder.cleanse(q: '186 Willis St, Wellington')
 
     if result
-      $stdout.puts "Found: #{result.postal}"
+      $stdout.puts "Success: #{result.postal}""
     else
       $stdout.puts "Sorry, can't find that address"
+    end
+
+### Bulk Operations
+
+If you have a series of calls you need to make to AddressFinder, you can use the
+bulk method which re-uses the HTTP connection.
+
+Usage example:
+
+    AddressFinder.bulk do |af|
+      CSV.foreach('auckland_addresses.csv') do |row|
+        result = af.cleanse(q: row[0], region_code: '1')
+
+        if result
+          $stdout.puts "Success: #{result.postal}""
+        else
+          $stdout.puts "Sorry, can't find that address"
+        end
+      end
     end

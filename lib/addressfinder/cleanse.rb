@@ -1,6 +1,6 @@
 module AddressFinder
   class Cleanse
-    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil)
+    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, http:)
       @params = {}
       @params['q'] = q
       @params['delivered'] = delivered if delivered
@@ -11,6 +11,7 @@ module AddressFinder
       @params['key'] = config.api_key
       @params['secret'] = config.api_secret
       @country = country || config.default_country
+      @http = http
     end
 
     def perform
@@ -21,20 +22,14 @@ module AddressFinder
 
     private
 
-    attr_reader :full_url, :params, :response_body, :response_status, :result, :country
+    attr_reader :request_uri, :params, :response_body, :response_status, :result, :country, :http
 
     def build_request
-      @full_url = "https://#{config.hostname}:#{config.port}/api/#{country}/address/cleanse?#{encoded_params}"
+      @request_uri = "/api/#{country}/address/cleanse?#{encoded_params}"
     end
 
     def execute_request
-      uri = URI.parse(full_url)
-      http = Net::HTTP.new(uri.host, uri.port, config.proxy_host, config.proxy_port, config.proxy_user, config.proxy_password)
-      http.open_timeout = config.timeout
-      http.read_timeout = config.timeout
-      http.use_ssl = (uri.scheme == "https")
-
-      request = Net::HTTP::Get.new(uri.request_uri)
+      request = Net::HTTP::Get.new(request_uri)
 
       response = http.request(request)
 
