@@ -1,6 +1,8 @@
+require 'net/http'
 require 'addressfinder/version'
 require 'addressfinder/configuration'
 require 'addressfinder/cleanse'
+require 'addressfinder/bulk'
 require 'addressfinder/errors'
 
 module AddressFinder
@@ -19,8 +21,25 @@ module AddressFinder
       @configuration ||= AddressFinder::Configuration.new
     end
 
-    def cleanse(*args)
-      AddressFinder::Cleanse.new(*args).perform
+    def cleanse(args={})
+      AddressFinder::Cleanse.new(args.merge(http: configure_http)).perform
+    end
+
+    def bulk(&block)
+      AddressFinder::Bulk.new(&block).perform
+    end
+
+    private
+
+    def configure_http
+      http = Net::HTTP.new(configuration.hostname, configuration.port,
+                           configuration.proxy_host, configuration.proxy_port,
+                           configuration.proxy_user, configuration.proxy_password)
+      http.open_timeout = configuration.timeout
+      http.read_timeout = configuration.timeout
+      http.use_ssl = true
+
+      http
     end
   end
 end
