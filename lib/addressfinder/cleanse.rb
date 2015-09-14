@@ -1,5 +1,10 @@
+require 'ostruct'
+
 module AddressFinder
   class Cleanse
+
+    attr_reader :result
+
     def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, http:)
       @params = {}
       @params['q'] = q
@@ -18,11 +23,15 @@ module AddressFinder
       build_request
       execute_request
       build_result
+
+      self
     end
 
     private
 
-    attr_reader :request_uri, :params, :response_body, :response_status, :result, :country, :http
+    attr_reader :request_uri, :params, :result, :country, :http
+    attr_accessor :response_body, :response_status
+    attr_writer :result
 
     def build_request
       @request_uri = "/api/#{country}/address/cleanse?#{encoded_params}"
@@ -33,8 +42,8 @@ module AddressFinder
 
       response = http.request(request)
 
-      @response_body = response.body
-      @response_status = response.code
+      self.response_body = response.body
+      self.response_status = response.code
     end
 
     def build_result
@@ -43,10 +52,10 @@ module AddressFinder
       end
 
       if response_hash['matched']
-        return Result.new(response_hash)
+        self.result = Result.new(response_hash)
+      else
+        self.result = nil
       end
-
-      nil
     end
 
     def encoded_params
@@ -55,7 +64,7 @@ module AddressFinder
     end
 
     def response_hash
-      @_response_hash ||= JSON.parse(response_body)
+      @_response_hash ||= MultiJson.load(response_body)
     end
 
     def config

@@ -1,4 +1,5 @@
 require 'net/http'
+require 'multi_json'
 require 'addressfinder/version'
 require 'addressfinder/configuration'
 require 'addressfinder/cleanse'
@@ -22,10 +23,11 @@ module AddressFinder
     end
 
     def cleanse(args={})
-      AddressFinder::Cleanse.new(args.merge(http: configure_http)).perform
+      AddressFinder::Cleanse.new(args.merge(http: configure_http)).perform.result
     end
 
     def bulk(&block)
+      # TODO include parameter http: configure_http
       AddressFinder::Bulk.new(&block).perform
     end
 
