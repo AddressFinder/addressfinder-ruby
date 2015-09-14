@@ -15,6 +15,7 @@ module AddressFinder
       self.hostname = 'api.addressfinder.io'
       self.port = 443
       self.timeout = 10
+      self.default_country = 'nz'
     end
   end
 end
