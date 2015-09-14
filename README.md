@@ -1,5 +1,7 @@
 # AddressFinder Ruby Gem
 
+[![Build  Status](https://travis-ci.org/AbleTech/addressfinder-ruby.svg)](https://travis-ci.org/AbleTech/addressfinder-ruby)
+
 A client library for accessing the AddressFinder APIs.
 
 ## Installation
