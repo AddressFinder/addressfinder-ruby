@@ -1,3 +1,7 @@
+# AddressFinder 1.1.1 (September 14, 2015) #
+
+* Minor bugfixes
+
 # AddressFinder 1.1.0 (September 11, 2015) #
 
 * Support for bulk operations
