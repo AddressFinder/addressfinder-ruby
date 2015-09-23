@@ -62,4 +62,32 @@ RSpec.describe AddressFinder::Cleanse do
       it { expect(result).to eq(nil) }
     end
   end
+
+  describe '#encoded_params' do
+    subject(:encoded_params){ AddressFinder::Cleanse.new(q: q, http: nil).send(:encoded_params) }
+
+    context 'with a question mark value' do
+      let(:q){ '?' }
+
+      it { expect(encoded_params).to eq('q=%3F&format=json&key=XXX&secret=YYY') }
+    end
+
+    context 'with a normal address value' do
+      let(:q){ '12 high' }
+
+      it { expect(encoded_params).to eq('q=12%20high&format=json&key=XXX&secret=YYY') }
+    end
+
+    context 'with a blank value' do
+      let(:q){ '' }
+
+      it { expect(encoded_params).to eq('q=&format=json&key=XXX&secret=YYY') }
+    end
+
+    context 'with a nil value' do
+      let(:q){ nil }
+
+      it { expect(encoded_params).to eq('q=&format=json&key=XXX&secret=YYY') }
+    end
+  end
 end

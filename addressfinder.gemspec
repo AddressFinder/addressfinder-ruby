@@ -4,6 +4,7 @@ require File.expand_path('../lib/addressfinder/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.name          = "addressfinder"
   gem.version       = AddressFinder::VERSION
+  gem.licenses      = ['MIT']
   gem.authors       = ["Nigel Ramsay"]
   gem.email         = ["nigel@abletech.nz"]
   gem.description   = %q{Ruby client library for AddressFinder}
