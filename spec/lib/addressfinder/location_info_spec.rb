@@ -5,7 +5,7 @@ RSpec.describe AddressFinder::LocationInfo do
     AddressFinder.configure do |af|
       af.api_key = 'XXX'
       af.api_secret = 'YYY'
-      af.default_country = 'nz'
+      af.default_country = 'au'
     end
   end
 
@@ -18,42 +18,13 @@ RSpec.describe AddressFinder::LocationInfo do
     context 'with a simple PXID' do
       let(:args){ {pxid: '123', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/location/info.json?pxid=123&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/location/info.json?pxid=123&key=XXX&secret=YYY') }
     end
 
     context 'with a country override' do
       let(:args){ {pxid: '123', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/location/info.json?pxid=123&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/location/info.json?pxid=123&key=XXX&secret=YYY') }
     end
   end
-
-  # describe '#build_result' do
-  #   let(:cleanser){ AddressFinder::Cleanse.new(q: 'ignored', http: nil) }
-  #
-  #   before do
-  #     cleanser.send('response_body=', body)
-  #     cleanser.send('response_status=', status)
-  #   end
-  #
-  #   subject(:result){ cleanser.send(:build_result) }
-  #
-  #   context 'with a successful result' do
-  #     let(:body){ '{"matched": true, "postal_address": "Texas"}' }
-  #     let(:status){ '200' }
-  #
-  #     it { expect(result.class).to eq(AddressFinder::Cleanse::Result) }
-  #
-  #     it { expect(result.matched).to eq(true) }
-  #
-  #     it { expect(result.postal_address).to eq("Texas") }
-  #   end
-  #
-  #   context 'with an unfound result' do
-  #     let(:body){ '{"matched": false}' }
-  #     let(:status){ '200' }
-  #
-  #     it { expect(result).to eq(nil) }
-  #   end
-  # end
 end

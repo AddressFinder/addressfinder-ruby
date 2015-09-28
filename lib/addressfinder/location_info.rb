@@ -6,8 +6,13 @@ module AddressFinder
     attr_reader :result
 
     def initialize(pxid:, http:)
-      @pxid = pxid
       @http = http
+      @country = config.default_country
+
+      @params = {}
+      @params['pxid'] = pxid
+      @params['key'] = config.api_key
+      @params['secret'] = config.api_secret
     end
 
     def perform
@@ -29,7 +34,8 @@ module AddressFinder
     end
 
     def encoded_params
-      "pxid=#{@pxid}"
+      query = params.map{|k,v| "#{k}=#{v}"}.join('&')
+      URI::encode(query)
     end
 
     def execute_request
