@@ -3,6 +3,7 @@ require 'multi_json'
 require 'addressfinder/version'
 require 'addressfinder/configuration'
 require 'addressfinder/cleanse'
+require 'addressfinder/location_info'
 require 'addressfinder/bulk'
 require 'addressfinder/errors'
 
@@ -24,6 +25,10 @@ module AddressFinder
 
     def cleanse(args={})
       AddressFinder::Cleanse.new(args.merge(http: configure_http)).perform.result
+    end
+
+    def location_info(args={})
+      AddressFinder::LocationInfo.new(args.merge(http: configure_http)).perform.result
     end
 
     def bulk(&block)
