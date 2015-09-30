@@ -71,12 +71,16 @@ https://addressfinder.nz/docs/location_api/
 Usage example:
 
 ```ruby
-results = AddressFinder.location_search(q: 'Queen Street')
-
-if results.any?
-  $standout.puts "Success: #{results}"
-else
-  $standout.puts "Sorry, there were no location matches"
+begin
+  results = AddressFinder.location_search(q: 'Queen Street')
+  if results.any?
+    $standout.puts "Success: #{results}"
+  else
+    $standout.puts "Sorry, there were no location matches"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $standout.puts response['message']
 end
 ```
 
@@ -89,12 +93,16 @@ https://addressfinder.nz/docs/address_info_api/
 Usage example:
 
 ```ruby
-result = AddressFinder.location_info(pxid: '1-.B.3l')
-
-if result
-  $standout.puts "Success: #{result.a}"
-else
-  $standout.puts "Sorry, can't find that address"
+begin
+  result = AddressFinder.location_info(pxid: '1-.B.3l')
+  if result
+    $standout.puts "Success: #{result.a}"
+  else
+    $standout.puts "Sorry, can't find that location"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $standout.puts response['message']
 end
 ```
 
