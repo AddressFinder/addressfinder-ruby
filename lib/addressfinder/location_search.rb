@@ -32,6 +32,11 @@ module AddressFinder
       @request_uri = "/api/#{country}/location.json?#{encoded_params}"
     end
 
+    def encoded_params
+      query = params.map{|k,v| "#{k}=#{v}"}.join('&')
+      URI::encode(query)
+    end
+
     def execute_request
       request = Net::HTTP::Get.new(request_uri)
 
@@ -42,21 +47,14 @@ module AddressFinder
     end
 
     def build_result
-      if response_status != '200'
+      case response_status
+      when '200'
+        self.results = response_hash['completions'].map do |result_hash|
+          Result.new(result_hash)
+        end
+      else
         raise AddressFinder::RequestRejectedError.new(@response_status, @response_body)
       end
-
-      self.results = response_hash['completions'].map do |result_hash|
-        Result.new(result_hash)
-      end
-    end
-
-    def encoded_params
-      query_params = params.map do |k,v|
-        "#{k}=#{ERB::Util.url_encode(v)}"
-      end
-
-      query_params.join('&')
     end
 
     def response_hash
