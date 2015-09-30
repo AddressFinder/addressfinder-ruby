@@ -1,9 +1,9 @@
 require 'ostruct'
 
 module AddressFinder
-  class LocationInfo
+  class LocationSearch
 
-    attr_reader :result
+    attr_reader :results
 
     def initialize(params:, http:)
       @http = http
@@ -26,15 +26,10 @@ module AddressFinder
 
     attr_reader :request_uri, :params, :country, :http
     attr_accessor :response_body, :response_status
-    attr_writer :result
+    attr_writer :results
 
     def build_request
-      @request_uri = "/api/#{country}/location/info.json?#{encoded_params}"
-    end
-
-    def encoded_params
-      query = params.map{|k,v| "#{k}=#{v}"}.join('&')
-      URI::encode(query)
+      @request_uri = "/api/#{country}/location.json?#{encoded_params}"
     end
 
     def execute_request
@@ -47,14 +42,21 @@ module AddressFinder
     end
 
     def build_result
-      case response_status
-      when '200'
-        self.result = Result.new(response_hash)
-      when '404'
-        raise AddressFinder::NotFoundError.new(@response_status, @response_body, @pxid)
-      else
+      if response_status != '200'
         raise AddressFinder::RequestRejectedError.new(@response_status, @response_body)
       end
+
+      self.results = response_hash['completions'].map do |result_hash|
+        Result.new(result_hash)
+      end
+    end
+
+    def encoded_params
+      query_params = params.map do |k,v|
+        "#{k}=#{ERB::Util.url_encode(v)}"
+      end
+
+      query_params.join('&')
     end
 
     def response_hash

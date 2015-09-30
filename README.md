@@ -62,6 +62,42 @@ else
 end
 ```
 
+### Location Search
+
+See documentation on the available parameters and expected response here:
+
+https://addressfinder.nz/docs/location_api/
+
+Usage example:
+
+```ruby
+results = AddressFinder.location_search(q: 'Queen Street')
+
+if results.any?
+  $standout.puts "Success: #{results}"
+else
+  $standout.puts "Sorry, there were no location matches"
+end
+```
+
+### Location Info
+
+See documentation on the available parameters and expected response here:
+
+https://addressfinder.nz/docs/address_info_api/
+
+Usage example:
+
+```ruby
+result = AddressFinder.location_info(pxid: '1-.B.3l')
+
+if result
+  $standout.puts "Success: #{result.a}"
+else
+  $standout.puts "Sorry, can't find that address"
+end
+```
+
 ### Bulk Operations
 
 If you have a series of calls you need to make to AddressFinder, you can use the
