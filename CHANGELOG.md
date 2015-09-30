@@ -1,3 +1,8 @@
+# AddressFinder 1.2.0 (October 1, 2015) #
+
+* Add support for Location Search API
+* Add support for Location Info API
+
 # AddressFinder 1.1.2 (September 23, 2015) #
 
 * Minor bugfixes
