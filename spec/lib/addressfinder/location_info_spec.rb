@@ -26,6 +26,23 @@ RSpec.describe AddressFinder::LocationInfo do
 
       it { expect(request_uri).to eq('/api/au/location/info.json?pxid=123&key=XXX&secret=YYY') }
     end
+
+    context 'with a domain given' do
+      let(:args){ {pxid: '123', domain: 'testdomain.com'} }
+
+      it { expect(request_uri).to eq('/api/au/location/info.json?pxid=123&domain=testdomain.com&key=XXX&secret=YYY') }
+
+      context 'given in the AF configuration' do
+
+        let(:args){ {pxid: '123'} }
+
+        it 'should use the config domain if set' do
+          AddressFinder.configuration.domain = 'http://testdomain.com'
+          expect(request_uri).to eq('/api/au/location/info.json?pxid=123&domain=http://testdomain.com&key=XXX&secret=YYY')
+          AddressFinder.configuration.domain = nil # set back to nil after
+        end
+      end
+    end
   end
 
   describe '#build_result' do
