@@ -39,6 +39,7 @@ AddressFinder.configure do |af|
   af.proxy_port = 8080
   af.proxy_user = 'username'
   af.proxy_password = 'password'
+  af.domain = 'http://myserverdomain.com'
 end
 ```
 
