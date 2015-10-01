@@ -10,6 +10,7 @@ module AddressFinder
       @country = params.delete(:country) || config.default_country
 
       @params = params
+      @params['domain'] = params['domain'] || config.domain if (params['domain'] || config.domain)
       @params['key'] = config.api_key
       @params['secret'] = config.api_secret
     end

@@ -5,13 +5,14 @@ module AddressFinder
 
     attr_reader :result
 
-    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, http:)
+    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, domain: nil, http:)
       @params = {}
       @params['q'] = q
       @params['delivered'] = delivered if delivered
       @params['post_box'] = post_box if post_box
       @params['rural'] = rural if rural
       @params['region_code'] = region_code if region_code
+      @params['domain'] = domain || config.domain if (domain || config.domain)
       @params['format'] = 'json'
       @params['key'] = config.api_key
       @params['secret'] = config.api_secret
