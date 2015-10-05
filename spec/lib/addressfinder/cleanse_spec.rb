@@ -43,8 +43,8 @@ RSpec.describe AddressFinder::Cleanse do
         let(:args){ {q: '123', http: http} }
 
         it 'should use the config domain if set' do
-          AddressFinder.configuration.domain = 'http://testdomain.com'
-          expect(request_uri).to eq('/api/nz/address/cleanse?q=123&domain=http://testdomain.com&format=json&key=XXX&secret=YYY')
+          AddressFinder.configuration.domain = 'anotherdomain.com'
+          expect(request_uri).to eq('/api/nz/address/cleanse?q=123&domain=anotherdomain.com&format=json&key=XXX&secret=YYY')
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end

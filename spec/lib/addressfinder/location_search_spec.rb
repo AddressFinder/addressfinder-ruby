@@ -43,8 +43,8 @@ RSpec.describe AddressFinder::LocationSearch do
         let(:args){ {q: '123'} }
 
         it 'should use the config domain if set' do
-          AddressFinder.configuration.domain = 'http://testdomain.com'
-          expect(request_uri).to eq('/api/nz/location.json?q=123&domain=http://testdomain.com&key=XXX&secret=YYY')
+          AddressFinder.configuration.domain = 'anotherdomain.com'
+          expect(request_uri).to eq('/api/nz/location.json?q=123&domain=anotherdomain.com&key=XXX&secret=YYY')
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end
