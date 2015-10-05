@@ -21,7 +21,7 @@ module AddressFinder
       end
 
       def cleanse(args={})
-        AddressFinder::Cleanse.new(args.merge(http: http)).perform
+        AddressFinder::Cleanse.new(args.merge(http: http)).perform.result
       end
 
       private
