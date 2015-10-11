@@ -5,8 +5,8 @@ Gem::Specification.new do |gem|
   gem.name          = "addressfinder"
   gem.version       = AddressFinder::VERSION
   gem.licenses      = ['MIT']
-  gem.authors       = ["Nigel Ramsay"]
-  gem.email         = ["nigel@abletech.nz"]
+  gem.authors       = ["Nigel Ramsay", "Naiki Pohe"]
+  gem.email         = ["nigel.ramsay@abletech.co.nz", "naiki.pohe@abletech.co.nz"]
   gem.description   = %q{Ruby client library for AddressFinder}
   gem.summary       = %q{Provides easy access to AddressFinder APIs}
   gem.homepage      = "https://github.com/AbleTech/addressfinder-ruby"
