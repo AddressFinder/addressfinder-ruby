@@ -17,11 +17,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.required_ruby_version = '~> 2.1'
-  gem.add_runtime_dependency 'multi_json', '~> 1.0'
-
+  gem.add_dependency 'multi_json', '~> 1.11'
   gem.add_development_dependency 'rspec', '~> 3.3'
-  gem.add_development_dependency 'guard-rspec', '~> 4.5'
-  gem.add_development_dependency 'bundler', '~> 0'
-  gem.add_development_dependency 'rake', '~> 0'
-  gem.add_development_dependency 'webmock', '~> 0'
+  gem.add_development_dependency 'guard-rspec', '~> 4.6'
+  gem.add_development_dependency 'rake', '~> 10.4'
+  gem.add_development_dependency 'webmock', '~> 1.21'
 end
