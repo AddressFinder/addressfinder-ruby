@@ -32,6 +32,23 @@ RSpec.describe AddressFinder::Cleanse do
 
       it { expect(request_uri).to eq('/api/au/address/cleanse?q=186%20willis%20st&format=json&key=XXX&secret=YYY') }
     end
+
+    context 'with a domain given' do
+      let(:args){ {q: '123', domain: 'testdomain.com', http: http} }
+
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=123&domain=testdomain.com&format=json&key=XXX&secret=YYY') }
+
+      context 'given in the AF configuration' do
+
+        let(:args){ {q: '123', http: http} }
+
+        it 'should use the config domain if set' do
+          AddressFinder.configuration.domain = 'anotherdomain.com'
+          expect(request_uri).to eq('/api/nz/address/cleanse?q=123&domain=anotherdomain.com&format=json&key=XXX&secret=YYY')
+          AddressFinder.configuration.domain = nil # set back to nil after
+        end
+      end
+    end
   end
 
   describe '#build_result' do
