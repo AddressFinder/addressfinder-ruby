@@ -38,6 +38,14 @@ module AddressFinder
       AddressFinder::LocationInfo.new(params: args, http: configure_http).perform.result
     end
 
+    def address_search(args={})
+      AddressFinder::AddressSearch.new(params: args, http: configure_http).perform.results
+    end
+
+    def address_info(args={})
+      AddressFinder::AddressInfo.new(params: args, http: configure_http).perform.result
+    end
+
     def bulk(&block)
       # TODO include parameter http: configure_http
       AddressFinder::Bulk.new(&block).perform
