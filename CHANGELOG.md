@@ -1,3 +1,8 @@
+# AddressFinder 1.4.0 (October 19, 2015) #
+
+* Add support for Address Search API
+* Add support for Address Info API
+
 # AddressFinder 1.3.0 (October 16, 2015) #
 
 * Add optional domain parameter to configuration and API calls
