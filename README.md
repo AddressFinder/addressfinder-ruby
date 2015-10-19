@@ -89,7 +89,7 @@ end
 
 See documentation on the available parameters and expected response here:
 
-https://addressfinder.nz/docs/address_info_api/
+https://addressfinder.nz/docs/location_info_api/
 
 Usage example:
 
@@ -100,6 +100,50 @@ begin
     $standout.puts "Success: #{result.a}"
   else
     $standout.puts "Sorry, can't find that location"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $standout.puts response['message']
+end
+```
+
+### Address Search
+
+See documentation on the available parameters and expected response here:
+
+https://addressfinder.nz/docs/address_api/
+
+Usage example:
+
+```ruby
+begin
+  results = AddressFinder.address_search(q: '186 Willis Street')
+  if results.any?
+    $standout.puts "Success: #{results}"
+  else
+    $standout.puts "Sorry, there were no address matches"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $standout.puts response['message']
+end
+```
+
+### Address Info
+
+See documentation on the available parameters and expected response here:
+
+https://addressfinder.nz/docs/address_info_api/
+
+Usage example:
+
+```ruby
+begin
+  result = AddressFinder.address_info(pxid: '1-.B.3l')
+  if result
+    $standout.puts "Success: #{result.a}"
+  else
+    $standout.puts "Sorry, can't find that address"
   end
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
