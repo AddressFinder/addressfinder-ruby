@@ -5,6 +5,8 @@ require 'addressfinder/configuration'
 require 'addressfinder/cleanse'
 require 'addressfinder/location_info'
 require 'addressfinder/location_search'
+require 'addressfinder/address_info'
+require 'addressfinder/address_search'
 require 'addressfinder/bulk'
 require 'addressfinder/errors'
 
