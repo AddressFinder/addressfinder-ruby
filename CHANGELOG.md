@@ -1,3 +1,7 @@
+# AddressFinder 1.5.0 (October 19, 2015) #
+
+* Add support for supplying `key` and `secret` override values in each API call
+
 # AddressFinder 1.4.0 (October 19, 2015) #
 
 * Add support for Address Search API
