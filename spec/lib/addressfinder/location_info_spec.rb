@@ -22,9 +22,15 @@ RSpec.describe AddressFinder::LocationInfo do
     end
 
     context 'with a country override' do
-      let(:args){ {pxid: '123'} }
+      let(:args){ {pxid: '123', country: 'nz'} }
 
-      it { expect(request_uri).to eq('/api/au/location/info.json?pxid=123&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/location/info.json?pxid=123&key=XXX&secret=YYY') }
+    end
+
+    context 'with a key and secret override' do
+      let(:args){ {pxid: '123', key: 'AAA', secret: 'BBB'} }
+
+      it { expect(request_uri).to eq('/api/au/location/info.json?pxid=123&key=AAA&secret=BBB') }
     end
 
     context 'with a domain given' do
