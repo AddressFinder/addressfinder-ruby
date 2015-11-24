@@ -11,8 +11,8 @@ module AddressFinder
 
       @params = params
       @params['domain'] = params['domain'] || config.domain if (params['domain'] || config.domain)
-      @params['key'] = config.api_key
-      @params['secret'] = config.api_secret
+      @params[:key] ||= config.api_key
+      @params[:secret] ||= config.api_secret
     end
 
     def perform

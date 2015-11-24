@@ -10,8 +10,8 @@ module AddressFinder
       @country = params.delete(:country) || config.default_country
 
       @params = params
-      @params['key'] = config.api_key
-      @params['secret'] = config.api_secret
+      @params[:key] ||= config.api_key
+      @params[:secret] ||= config.api_secret
     end
 
     def perform

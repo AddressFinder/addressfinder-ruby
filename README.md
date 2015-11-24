@@ -171,3 +171,35 @@ AddressFinder.bulk do |af|
   end
 end
 ```
+
+## Advanced Usage
+
+### Key and Secret Override
+
+What if you want to use another acccount for a specific query using the AddressFinder gem in your ruby app?
+
+You can override the `api_key` and `api_secret` set in the AddressFinder.configure block in `./config/initializers/addressfinder.rb` when using the AddressFinder gem.
+
+Those AddressFinder methods accept `:key` and `:secret` arguments:
+- `#cleanse`,
+- `#location_search`,
+- `#location_info`,
+- `#address_search`
+- `#address_info`
+
+Usage example:
+
+```ruby
+begin
+  result = AddressFinder.address_info(pxid: '1-.B.3l', key: 'AAAAAAAAAAAAA', secret: 'BBBBBBBBBBBBB')
+  if result
+    $standout.puts "Success: #{result.a}"
+  else
+    $standout.puts "Sorry, can't find that address"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $standout.puts response['message']
+end
+```
+
