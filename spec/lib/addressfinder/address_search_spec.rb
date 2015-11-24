@@ -33,10 +33,16 @@ RSpec.describe AddressFinder::AddressSearch do
       it { expect(request_uri).to eq('/api/au/address.json?q=186%20willis%20st&key=XXX&secret=YYY') }
     end
 
-    context 'with a key and secret override' do
-      let(:args){ {q: '186 willis st', key: 'AAA', secret: 'BBB'} }
+    context 'with a key override' do
+      let(:args){ {q: '186 willis st', key: 'AAA'} }
 
-      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&key=AAA&secret=BBB') }
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&key=AAA&secret=YYY') }
+    end
+
+    context 'with a secret override' do
+      let(:args){ {q: '186 willis st', secret: 'BBB'} }
+
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&key=XXX&secret=BBB') }
     end
   end
 
