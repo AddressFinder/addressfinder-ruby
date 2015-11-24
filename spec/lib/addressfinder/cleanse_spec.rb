@@ -33,6 +33,12 @@ RSpec.describe AddressFinder::Cleanse do
       it { expect(request_uri).to eq('/api/au/address/cleanse?q=186%20willis%20st&format=json&key=XXX&secret=YYY') }
     end
 
+    context 'with a key and secret override' do
+      let(:args){ {q: '186 willis st', key: 'AAA', secret: 'BBB', http: http} }
+
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186%20willis%20st&format=json&key=AAA&secret=BBB') }
+    end
+
     context 'with a domain given' do
       let(:args){ {q: '123', domain: 'testdomain.com', http: http} }
 

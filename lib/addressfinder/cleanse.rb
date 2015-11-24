@@ -5,7 +5,7 @@ module AddressFinder
 
     attr_reader :result
 
-    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, domain: nil, http:)
+    def initialize(q:, key: nil, secret: nil, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, domain: nil, http:)
       @params = {}
       @params['q'] = q
       @params['delivered'] = delivered if delivered
@@ -14,8 +14,8 @@ module AddressFinder
       @params['region_code'] = region_code if region_code
       @params['domain'] = domain || config.domain if (domain || config.domain)
       @params['format'] = 'json'
-      @params['key'] = config.api_key
-      @params['secret'] = config.api_secret
+      @params['key'] = key || config.api_key
+      @params['secret'] = secret || config.api_secret
       @country = country || config.default_country
       @http = http
     end
