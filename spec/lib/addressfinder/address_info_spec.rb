@@ -36,7 +36,7 @@ RSpec.describe AddressFinder::AddressInfo do
     context 'with a secret override' do
       let(:args){ {pxid: '123', secret: 'BBB'} }
 
-      it { expect(request_uri).to eq('/api/au/address/info.json?pxid=123&key=XXX&secret=BBB') }
+      it { expect(request_uri).to eq('/api/au/address/info.json?pxid=123&secret=BBB&key=XXX') }
     end
   end
 

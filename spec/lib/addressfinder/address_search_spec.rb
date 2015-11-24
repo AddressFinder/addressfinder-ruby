@@ -42,7 +42,7 @@ RSpec.describe AddressFinder::AddressSearch do
     context 'with a secret override' do
       let(:args){ {q: '186 willis st', secret: 'BBB'} }
 
-      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&key=XXX&secret=BBB') }
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&secret=BBB&key=XXX') }
     end
   end
 
