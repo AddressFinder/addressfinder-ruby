@@ -5,7 +5,7 @@ module AddressFinder
 
     attr_reader :result
 
-    def initialize(q:, key: nil, secret: nil, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, domain: nil, http:)
+    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, domain: nil, key: nil, secret: nil, http:)
       @params = {}
       @params['q'] = q
       @params['delivered'] = delivered if delivered
