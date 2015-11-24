@@ -33,6 +33,12 @@ RSpec.describe AddressFinder::LocationSearch do
       it { expect(request_uri).to eq('/api/au/location.json?q=willis%20st&key=XXX&secret=YYY') }
     end
 
+    context 'with a key and secret override' do
+      let(:args){ {q: 'willis st', key: 'AAA', secret: 'BBB'} }
+
+      it { expect(request_uri).to eq('/api/nz/location.json?q=willis%20st&key=AAA&secret=BBB') }
+    end
+
     context 'with a domain given' do
       let(:args){ {q: '123', domain: 'testdomain.com'} }
 
