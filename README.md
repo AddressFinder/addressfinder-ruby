@@ -156,6 +156,8 @@ end
 If you have a series of calls you need to make to AddressFinder, you can use the
 bulk method which re-uses the HTTP connection.
 
+The bulk method is only available for #cleanse operation.
+
 Usage example:
 
 ```ruby
