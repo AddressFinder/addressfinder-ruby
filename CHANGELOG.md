@@ -1,4 +1,8 @@
-# AddressFinder 1.5.0 (October 19, 2015) #
+# AddressFinder 1.5.1 (November 25, 2015) #
+
+* Update the ClientProxy #cleanse method to return result instead of an AddressFinder::Cleanse instance
+
+# AddressFinder 1.5.0 (November 24, 2015) #
 
 * Add support for supplying `key` and `secret` override values in each API call
 
