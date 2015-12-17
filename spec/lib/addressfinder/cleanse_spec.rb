@@ -98,7 +98,7 @@ RSpec.describe AddressFinder::Cleanse do
     context 'with a question mark value' do
       let(:q){ '?' }
 
-      it { expect(encoded_params).to eq('q=%3F&format=json&key=XXX&secret=YYY') }
+      it { expect(encoded_params).to eq('q=?&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a normal address value' do
