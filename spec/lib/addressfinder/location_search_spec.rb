@@ -24,25 +24,25 @@ RSpec.describe AddressFinder::LocationSearch do
     context 'with more arguments' do
       let(:args){ {q: 'willis st', street: 1, max: 10} }
 
-      it { expect(request_uri).to eq('/api/nz/location.json?q=willis%20st&street=1&max=10&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/location.json?q=willis+st&street=1&max=10&key=XXX&secret=YYY') }
     end
 
     context 'with a country override' do
       let(:args){ {q: 'willis st', country: 'au'} }
 
-      it { expect(request_uri).to eq('/api/au/location.json?q=willis%20st&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/location.json?q=willis+st&key=XXX&secret=YYY') }
     end
 
     context 'with a key override' do
       let(:args){ {q: 'willis st', key: 'AAA'} }
 
-      it { expect(request_uri).to eq('/api/nz/location.json?q=willis%20st&key=AAA&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/location.json?q=willis+st&key=AAA&secret=YYY') }
     end
 
     context 'with a secret override' do
       let(:args){ {q: 'willis st', secret: 'BBB'} }
 
-      it { expect(request_uri).to eq('/api/nz/location.json?q=willis%20st&secret=BBB&key=XXX') }
+      it { expect(request_uri).to eq('/api/nz/location.json?q=willis+st&secret=BBB&key=XXX') }
     end
 
     context 'with a domain given' do

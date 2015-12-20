@@ -60,8 +60,7 @@ module AddressFinder
     end
 
     def encoded_params
-      query_params = params.map{|k,v| "#{k}=#{v}"}.join('&')
-      URI::encode(query_params)
+      Util.encode_and_join_params(params)
     end
 
     def response_hash

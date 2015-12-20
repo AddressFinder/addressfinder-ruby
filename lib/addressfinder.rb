@@ -9,6 +9,7 @@ require 'addressfinder/address_info'
 require 'addressfinder/address_search'
 require 'addressfinder/bulk'
 require 'addressfinder/errors'
+require 'addressfinder/util'
 
 module AddressFinder
   class << self
