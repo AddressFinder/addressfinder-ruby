@@ -53,8 +53,8 @@ module AddressFinder
       end
 
       if response_hash['matched']
-        self.result = Result.new(response_hash)
-      else
+        self.result = Result.new(response_hash['address'] || response_hash)
+      elsif
         self.result = nil
       end
     end

@@ -50,11 +50,12 @@ You can obtain your API key and secret from the AddressFinder Portal.
 See the documentation on the available parameters and expected response here:
 
 https://addressfinder.nz/docs/address_cleanse_api/
+https://addressfinder.com.au/docs/address_cleanse_api/
 
 Usage example:
 
 ```ruby
-result = AddressFinder.cleanse(q: '186 Willis St, Wellington')
+result = AddressFinder.cleanse(q: '186 Willis St, Wellington', country: 'nz')
 
 if result
   $stdout.puts "Success: #{result.postal}"
