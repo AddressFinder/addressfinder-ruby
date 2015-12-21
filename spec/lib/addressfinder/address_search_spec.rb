@@ -18,31 +18,31 @@ RSpec.describe AddressFinder::AddressSearch do
     context 'with minimal arguments' do
       let(:args){ {q: '186 willis'} }
 
-      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186+willis&key=XXX&secret=YYY') }
     end
 
     context 'with more arguments' do
       let(:args){ {q: '186 willis st', delivered: 1, max: 10} }
 
-      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&delivered=1&max=10&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186+willis+st&delivered=1&max=10&key=XXX&secret=YYY') }
     end
 
     context 'with a country override' do
       let(:args){ {q: '186 willis st', country: 'au'} }
 
-      it { expect(request_uri).to eq('/api/au/address.json?q=186%20willis%20st&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address.json?q=186+willis+st&key=XXX&secret=YYY') }
     end
 
     context 'with a key override' do
       let(:args){ {q: '186 willis st', key: 'AAA'} }
 
-      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&key=AAA&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186+willis+st&key=AAA&secret=YYY') }
     end
 
     context 'with a secret override' do
       let(:args){ {q: '186 willis st', secret: 'BBB'} }
 
-      it { expect(request_uri).to eq('/api/nz/address.json?q=186%20willis%20st&secret=BBB&key=XXX') }
+      it { expect(request_uri).to eq('/api/nz/address.json?q=186+willis+st&secret=BBB&key=XXX') }
     end
   end
 

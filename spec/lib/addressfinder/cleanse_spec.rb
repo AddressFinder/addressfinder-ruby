@@ -18,31 +18,31 @@ RSpec.describe AddressFinder::Cleanse do
     context 'with minimal arguments' do
       let(:args){ {q: '186 willis st', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186%20willis%20st&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with more arguments' do
       let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186%20willis%20st&delivered=true&region_code=A&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&delivered=true&region_code=A&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a country override' do
       let(:args){ {q: '186 willis st', country: 'au', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186%20willis%20st&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a key override' do
       let(:args){ {q: '186 willis st', key: 'AAA', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186%20willis%20st&format=json&key=AAA&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&format=json&key=AAA&secret=YYY') }
     end
 
     context 'with a secret override' do
       let(:args){ {q: '186 willis st', secret: 'BBB', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186%20willis%20st&format=json&key=XXX&secret=BBB') }
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=BBB') }
     end
 
     context 'with a domain given' do
@@ -73,7 +73,7 @@ RSpec.describe AddressFinder::Cleanse do
 
     subject(:result){ cleanser.send(:build_result) }
 
-    context 'with a successful result' do
+    context 'with a successful nz result' do
       let(:body){ '{"matched": true, "postal_address": "Texas"}' }
       let(:status){ '200' }
 
@@ -84,39 +84,20 @@ RSpec.describe AddressFinder::Cleanse do
       it { expect(result.postal_address).to eq("Texas") }
     end
 
+    context 'with a successful au result' do
+      let(:body){ %Q({"matched": true, "success": true, "address": {"full_address": "Texas"}}) }
+      let(:status){ '200' }
+
+      it { expect(result.class).to eq(AddressFinder::Cleanse::Result) }
+
+      it { expect(result.full_address).to eq("Texas") }
+    end
+
     context 'with an unfound result' do
       let(:body){ '{"matched": false}' }
       let(:status){ '200' }
 
       it { expect(result).to eq(nil) }
-    end
-  end
-
-  describe '#encoded_params' do
-    subject(:encoded_params){ AddressFinder::Cleanse.new(q: q, http: nil).send(:encoded_params) }
-
-    context 'with a question mark value' do
-      let(:q){ '?' }
-
-      it { expect(encoded_params).to eq('q=%3F&format=json&key=XXX&secret=YYY') }
-    end
-
-    context 'with a normal address value' do
-      let(:q){ '12 high' }
-
-      it { expect(encoded_params).to eq('q=12%20high&format=json&key=XXX&secret=YYY') }
-    end
-
-    context 'with a blank value' do
-      let(:q){ '' }
-
-      it { expect(encoded_params).to eq('q=&format=json&key=XXX&secret=YYY') }
-    end
-
-    context 'with a nil value' do
-      let(:q){ nil }
-
-      it { expect(encoded_params).to eq('q=&format=json&key=XXX&secret=YYY') }
     end
   end
 end
