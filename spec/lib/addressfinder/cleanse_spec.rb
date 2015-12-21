@@ -73,7 +73,7 @@ RSpec.describe AddressFinder::Cleanse do
 
     subject(:result){ cleanser.send(:build_result) }
 
-    context 'with a successful result' do
+    context 'with a successful nz result' do
       let(:body){ '{"matched": true, "postal_address": "Texas"}' }
       let(:status){ '200' }
 
@@ -82,6 +82,15 @@ RSpec.describe AddressFinder::Cleanse do
       it { expect(result.matched).to eq(true) }
 
       it { expect(result.postal_address).to eq("Texas") }
+    end
+
+    context 'with a successful au result' do
+      let(:body){ %Q({"matched": true, "success": true, "address": {"full_address": "Texas"}}) }
+      let(:status){ '200' }
+
+      it { expect(result.class).to eq(AddressFinder::Cleanse::Result) }
+
+      it { expect(result.full_address).to eq("Texas") }
     end
 
     context 'with an unfound result' do
