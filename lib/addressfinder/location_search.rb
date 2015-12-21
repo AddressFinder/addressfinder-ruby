@@ -34,8 +34,7 @@ module AddressFinder
     end
 
     def encoded_params
-      query = params.map{|k,v| "#{k}=#{v}"}.join('&')
-      URI::encode(query)
+      Util.encode_and_join_params(params)
     end
 
     def execute_request
