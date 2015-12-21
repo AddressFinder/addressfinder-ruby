@@ -1,3 +1,8 @@
+# AddressFinder 1.5.2 (December 21, 2015) #
+
+* Update for the nested response format used in Address Cleanse Australia
+* Add an encoding helper which uses CGI::escape
+
 # AddressFinder 1.5.1 (November 25, 2015) #
 
 * Update the ClientProxy #cleanse method to return result instead of an AddressFinder::Cleanse instance
