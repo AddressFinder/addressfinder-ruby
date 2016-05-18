@@ -49,8 +49,8 @@ You can obtain your API key and secret from the AddressFinder Portal.
 
 See the documentation on the available parameters and expected response here:
 
-https://addressfinder.nz/docs/address_cleanse_api/
-https://addressfinder.com.au/docs/address_cleanse_api/
+* [https://addressfinder.nz/docs/address_cleanse_api/](https://addressfinder.nz/docs/address_cleanse_api/?rc=github-rubygem)
+* [https://addressfinder.com.au/docs/address_cleanse_api/](https://addressfinder.com.au/docs/address_cleanse_api/?rc=github-rubygem)
 
 Usage example:
 
@@ -68,7 +68,7 @@ end
 
 See documentation on the available parameters and expected response here:
 
-https://addressfinder.nz/docs/location_api/
+[https://addressfinder.nz/docs/location_api/](https://addressfinder.nz/docs/location_api/?rc=github-rubygem)
 
 Usage example:
 
@@ -90,7 +90,7 @@ end
 
 See documentation on the available parameters and expected response here:
 
-https://addressfinder.nz/docs/location_info_api/
+[https://addressfinder.nz/docs/location_info_api/](https://addressfinder.nz/docs/location_info_api/?rc=github-rubygem)
 
 Usage example:
 
@@ -112,7 +112,7 @@ end
 
 See documentation on the available parameters and expected response here:
 
-https://addressfinder.nz/docs/address_api/
+[https://addressfinder.nz/docs/address_api/](https://addressfinder.nz/docs/address_api/?rc=github-rubygem)
 
 Usage example:
 
@@ -134,7 +134,7 @@ end
 
 See documentation on the available parameters and expected response here:
 
-https://addressfinder.nz/docs/address_info_api/
+[https://addressfinder.nz/docs/address_info_api/](https://addressfinder.nz/docs/address_info_api/?rc=github-rubygem)
 
 Usage example:
 
