@@ -22,5 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'guard-rspec', '~> 4.6'
   gem.add_development_dependency 'rake', '~> 10.4'
   gem.add_development_dependency 'webmock', '~> 1.21'
-  gem.add_development_dependency 'listen', '~> 3.0'
+  gem.add_development_dependency 'listen', '~> 3.0.0'
 end
