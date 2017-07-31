@@ -11,11 +11,13 @@ module AddressFinder
     attr_accessor :timeout
     attr_accessor :default_country
     attr_accessor :domain
+    attr_accessor :retries
 
     def initialize
       self.hostname = 'api.addressfinder.io'
       self.port = 443
       self.timeout = 10
+      self.retries = 0
       self.default_country = 'nz'
     end
   end

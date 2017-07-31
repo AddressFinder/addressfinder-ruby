@@ -6,13 +6,37 @@ RSpec.describe AddressFinder::Cleanse do
       af.api_key = 'XXX'
       af.api_secret = 'YYY'
       af.default_country = 'nz'
+      af.timeout = 5
+      af.retries = 3
+    end
+  end
+
+  let(:cleanser){ AddressFinder::Cleanse.new(args) }
+  let(:http){ AddressFinder.send(:configure_http) }
+
+  describe '#execute_request' do
+    let(:args){ {q: "186 Willis Street", http: http} }
+    before { allow(cleanser).to receive(:request_uri).and_return("/test/path") }
+    subject(:execute_request){ cleanser.send(:execute_request) }
+
+    it "retries an errored request another time before succeeding" do
+      expect(http).to receive(:request).once.and_raise(Net::OpenTimeout.new)
+      expect(http).to receive(:request).once.and_return(double(:response, body: "OK", code: "200"))
+      execute_request
+    end
+
+    it "re-raises a Net::OpenTimeout error after 3 retries" do
+      expect(http).to receive(:request).exactly(4).times.and_raise(Net::OpenTimeout.new)
+      expect(execute_request).to raise_error(Net::OpenTimeout.new)
+    end
+
+    it "re-raises a Net::ReadTimeout error after 3 retries" do
+      expect(http).to receive(:request).exactly(4).times.and_raise(Net::ReadTimeout.new)
+      expect(execute_request).to raise_error(Net::ReadTimeout.new)
     end
   end
 
   describe '#build_request' do
-    let(:cleanser){ AddressFinder::Cleanse.new(args) }
-    let(:http){ AddressFinder.send(:configure_http) }
-
     subject(:request_uri){ cleanser.send(:build_request) }
 
     context 'with minimal arguments' do
@@ -64,7 +88,7 @@ RSpec.describe AddressFinder::Cleanse do
   end
 
   describe '#build_result' do
-    let(:cleanser){ AddressFinder::Cleanse.new(q: 'ignored', http: nil) }
+    let(:args){ {q: 'ignored', http: nil} }
 
     before do
       cleanser.send('response_body=', body)
