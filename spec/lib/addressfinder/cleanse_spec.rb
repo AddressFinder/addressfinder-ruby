@@ -12,7 +12,7 @@ RSpec.describe AddressFinder::Cleanse do
   end
 
   let(:cleanser){ AddressFinder::Cleanse.new(args) }
-  let(:http){ AddressFinder.send(:configure_http) }
+  let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
 
   describe '#execute_request' do
     let(:args){ {q: "186 Willis Street", http: http} }
@@ -20,19 +20,19 @@ RSpec.describe AddressFinder::Cleanse do
     subject(:execute_request){ cleanser.send(:execute_request) }
 
     it "retries an errored request another time before succeeding" do
-      expect(http).to receive(:request).once.and_raise(Net::OpenTimeout.new)
-      expect(http).to receive(:request).once.and_return(double(:response, body: "OK", code: "200"))
+      expect_any_instance_of(Net::HTTP).to receive(:request).once.and_raise(Net::OpenTimeout.new)
+      expect_any_instance_of(Net::HTTP).to receive(:request).once.and_return(double(:response, body: "OK", code: "200"))
       execute_request
     end
 
     it "re-raises a Net::OpenTimeout error after 3 retries" do
-      expect(http).to receive(:request).exactly(4).times.and_raise(Net::OpenTimeout.new)
-      expect(execute_request).to raise_error(Net::OpenTimeout.new)
+      expect_any_instance_of(Net::HTTP).to receive(:request).exactly(4).times.and_raise(Net::OpenTimeout.new)
+      expect{execute_request}.to raise_error(Net::OpenTimeout)
     end
 
     it "re-raises a Net::ReadTimeout error after 3 retries" do
-      expect(http).to receive(:request).exactly(4).times.and_raise(Net::ReadTimeout.new)
-      expect(execute_request).to raise_error(Net::ReadTimeout.new)
+      expect_any_instance_of(Net::HTTP).to receive(:request).exactly(4).times.and_raise(Net::ReadTimeout.new)
+      expect{execute_request}.to raise_error(Net::ReadTimeout)
     end
   end
 
