@@ -48,8 +48,7 @@ module AddressFinder
     end
 
     def bulk(&block)
-      # TODO include parameter http: configure_http
-      AddressFinder::Bulk.new(&block).perform
+      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), &block).perform
     end
   end
 end

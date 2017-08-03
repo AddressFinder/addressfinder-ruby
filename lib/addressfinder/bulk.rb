@@ -1,24 +1,19 @@
 module AddressFinder
   class Bulk
-    def initialize(&block)
+    def initialize(http:, &block)
       @block = block
+      @http_config = http
     end
 
     def perform
-      Net::HTTP.start(config.hostname, config.port, use_ssl: true,
-                                                    open_timeout: config.timeout,
-                                                    read_timeout: config.timeout) do |http|
+      http_config.start do |http|
         block.call ClientProxy.new(http: http)
       end
     end
 
     private
 
-    attr_reader :block
-
-    def config
-      @_config ||= AddressFinder.configuration
-    end
+    attr_reader :block, :http_config
 
     class ClientProxy
       def initialize(http:)

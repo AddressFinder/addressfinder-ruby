@@ -8,6 +8,12 @@ module AddressFinder
       @config = config
     end
 
+    def start(&block)
+      net_http.start do
+        block.call(self)
+      end
+    end
+
     def request(args)
       retries = 0
       begin
