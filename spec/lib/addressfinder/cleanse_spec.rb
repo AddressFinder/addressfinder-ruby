@@ -13,25 +13,41 @@ RSpec.describe AddressFinder::Cleanse do
 
   let(:cleanser){ AddressFinder::Cleanse.new(args) }
   let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
+  let(:net_http){ http.send(:net_http) }
 
   describe '#execute_request' do
+    before do
+      allow(http).to receive(:sleep)
+      WebMock.allow_net_connect!(net_http_connect_on_start: true)
+    end
+
+    after do
+      WebMock.disable_net_connect!
+    end
+
     let(:args){ {q: "186 Willis Street", http: http} }
     before { allow(cleanser).to receive(:request_uri).and_return("/test/path") }
     subject(:execute_request){ cleanser.send(:execute_request) }
 
     it "retries an errored request another time before succeeding" do
-      expect_any_instance_of(Net::HTTP).to receive(:request).once.and_raise(Net::OpenTimeout.new)
-      expect_any_instance_of(Net::HTTP).to receive(:request).once.and_return(double(:response, body: "OK", code: "200"))
+      expect(net_http).to receive(:do_start).twice.and_call_original
+      expect(net_http).to receive(:transport_request).once.and_raise(Net::OpenTimeout)
+      expect(net_http).to receive(:transport_request).once.and_return(double(:response, body: "OK", code: "200"))
+      expect(net_http).to receive(:do_finish).twice.and_call_original
       execute_request
     end
 
     it "re-raises a Net::OpenTimeout error after 3 retries" do
-      expect_any_instance_of(Net::HTTP).to receive(:request).exactly(4).times.and_raise(Net::OpenTimeout.new)
+      expect(net_http).to receive(:do_start).exactly(4).times.and_call_original
+      expect(net_http).to receive(:transport_request).exactly(4).times.and_raise(Net::OpenTimeout)
+      expect(net_http).to receive(:do_finish).exactly(4).times.and_call_original
       expect{execute_request}.to raise_error(Net::OpenTimeout)
     end
 
     it "re-raises a Net::ReadTimeout error after 3 retries" do
-      expect_any_instance_of(Net::HTTP).to receive(:request).exactly(4).times.and_raise(Net::ReadTimeout.new)
+      expect(net_http).to receive(:do_start).exactly(4).times.and_call_original
+      expect(net_http).to receive(:transport_request).exactly(4).times.and_raise(Net::ReadTimeout)
+      expect(net_http).to receive(:do_finish).exactly(4).times.and_call_original
       expect{execute_request}.to raise_error(Net::ReadTimeout)
     end
   end

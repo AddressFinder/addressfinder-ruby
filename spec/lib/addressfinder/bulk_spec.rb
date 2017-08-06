@@ -16,7 +16,8 @@ RSpec.describe AddressFinder::Bulk do
     let(:net_http){ http.send(:net_http) }
 
     before do
-      WebMock.allow_net_connect!
+      allow(http).to receive(:sleep)
+      WebMock.allow_net_connect!(net_http_connect_on_start: true)
     end
 
     after do
@@ -34,15 +35,18 @@ RSpec.describe AddressFinder::Bulk do
       }
 
       it "uses 1 http connection" do
-        expect(net_http).to receive(:start).once.and_call_original
+        expect(net_http).to receive(:do_start).once.and_call_original
         expect(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        expect(net_http).to receive(:do_finish).once.and_call_original
         AddressFinder::Bulk.new(http: http, &block).perform
       end
 
       it "renews the http connection and continues where we left off when a Net::OpenTimeout error is raised" do
+        expect(net_http).to receive(:do_start).twice.and_call_original
         expect(net_http).to receive(:transport_request).once.and_return(response) # 1 Willis (success)
         expect(net_http).to receive(:transport_request).once.and_raise(Net::OpenTimeout) # 2 Willis (error)
         expect(net_http).to receive(:transport_request).exactly(2).and_return(response) # Retry 2 Willis (success) & 3 Willis (success)
+        expect(net_http).to receive(:do_finish).twice.times.and_call_original
         AddressFinder::Bulk.new(http: http, &block).perform
       end
     end

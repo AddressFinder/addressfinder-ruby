@@ -21,6 +21,11 @@ module AddressFinder
       rescue Net::ReadTimeout, Net::OpenTimeout => error
         if retries < config.retries
           retries += 1
+          sleep(1)
+          if net_http.started?
+            net_http.finish
+            net_http.start
+          end
           retry
         else
           raise error
