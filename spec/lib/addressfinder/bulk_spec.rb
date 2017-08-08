@@ -7,7 +7,7 @@ RSpec.describe AddressFinder::Bulk do
       af.api_secret = 'YYY'
       af.default_country = 'nz'
       af.timeout = 5
-      af.retries = 1
+      af.retries = 5
     end
   end
 
@@ -16,8 +16,8 @@ RSpec.describe AddressFinder::Bulk do
     let(:net_http){ http.send(:net_http) }
 
     before do
-      allow(http).to receive(:sleep)
       WebMock.allow_net_connect!(net_http_connect_on_start: true)
+      allow(http).to receive(:sleep)
     end
 
     after do
@@ -41,12 +41,15 @@ RSpec.describe AddressFinder::Bulk do
         AddressFinder::Bulk.new(http: http, &block).perform
       end
 
-      it "renews the http connection and continues where we left off when a Net::OpenTimeout error is raised" do
-        expect(net_http).to receive(:do_start).twice.and_call_original
+      it "re-establishes the http connection and continues where we left off when a Net::OpenTimeout, Net::ReadTimeout or SocketError is raised" do
+        expect(http).to receive(:re_establish_connection).exactly(3).times.and_call_original
+        expect(net_http).to receive(:do_start).exactly(4).times.and_call_original
         expect(net_http).to receive(:transport_request).once.and_return(response) # 1 Willis (success)
         expect(net_http).to receive(:transport_request).once.and_raise(Net::OpenTimeout) # 2 Willis (error)
+        expect(net_http).to receive(:transport_request).once.and_raise(Net::ReadTimeout) # Retry 2 Willis (error)
+        expect(net_http).to receive(:transport_request).once.and_raise(SocketError) # Retry 2 Willis (error)
         expect(net_http).to receive(:transport_request).exactly(2).and_return(response) # Retry 2 Willis (success) & 3 Willis (success)
-        expect(net_http).to receive(:do_finish).twice.times.and_call_original
+        expect(net_http).to receive(:do_finish).exactly(4).times.and_call_original
         AddressFinder::Bulk.new(http: http, &block).perform
       end
     end

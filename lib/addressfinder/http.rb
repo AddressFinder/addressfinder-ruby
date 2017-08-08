@@ -6,6 +6,7 @@ module AddressFinder
 
     def initialize(config)
       @config = config
+      @connection_is_bad = false
     end
 
     def start(&block)
@@ -17,15 +18,13 @@ module AddressFinder
     def request(args)
       retries = 0
       begin
+        re_establish_connection if @connection_is_bad
         net_http.request(args)
-      rescue Net::ReadTimeout, Net::OpenTimeout => error
+      rescue Net::ReadTimeout, Net::OpenTimeout, SocketError => error
         if retries < config.retries
           retries += 1
-          sleep(1)
-          if net_http.started?
-            net_http.finish
-            net_http.start
-          end
+          sleep(config.retry_delay)
+          @connection_is_bad = true if net_http.started?
           retry
         else
           raise error
@@ -34,6 +33,12 @@ module AddressFinder
     end
 
     private
+
+    def re_establish_connection
+      @connection_is_bad = false
+      net_http.finish
+      net_http.start
+    end
 
     def net_http
       @net_http ||= begin
