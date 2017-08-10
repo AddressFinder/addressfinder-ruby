@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/addressfinder.svg)](http://badge.fury.io/rb/addressfinder)
 [![Build  Status](https://travis-ci.org/AbleTech/addressfinder-ruby.svg)](https://travis-ci.org/AbleTech/addressfinder-ruby)
 
-A client library for accessing the AddressFinder APIs.
+A client library for accessing the [AddressFinder](https://addressfinder.nz/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder) APIs.
 
 ## Installation
 
@@ -19,40 +19,41 @@ Or install it yourself as:
 
     $ gem install addressfinder
 
-## Usage
+## Configuration
 
-### Configuration
-
-You should call the configure block on startup of your app. In a Ruby on Rails application this
-is normally performed in an initializer file. For example `./config/initializers/addressfinder.rb`
+Use the configure block to set your `api_key` and `api_secret`.
 
 ```ruby
 AddressFinder.configure do |af|
-  # Mandatory configuration
+  # Required
   af.api_key = 'XXXXXXXXXX'
   af.api_secret = 'YYYYYYYYYY'
-  af.default_country = 'nz'
 
-  # Optional configuration
-  af.timeout = 10 # seconds
-  af.proxy_host = 'corp.proxy.com'
+  # Optional
+  af.default_country = 'nz' # default: nz
+  af.timeout = 10 # default: 10 seconds
+  af.retries = 12 # default: 12
+  af.retry_delay = 5 # default: 5 seconds
+  af.domain = 'yourdomain.com'
+  af.proxy_host = 'yourproxy.com'
   af.proxy_port = 8080
   af.proxy_user = 'username'
   af.proxy_password = 'password'
-  af.domain = 'myserver.mycompany.co.nz'
 end
 ```
 
-You can obtain your API key and secret from the AddressFinder Portal.
+**_Don't know your key and secret?_**
+*Login to the [AddressFinder portal](https://portal.addressfinder.io/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder%20Portal) to obtain your key and secret.*
 
-### Address Cleansing
+**_For Ruby on Rails:_**
+*The configure block is best placed in an initializer file (`./config/initializers/addressfinder.rb`).*
 
-See the documentation on the available parameters and expected response here:
+## Usage
 
-* [https://addressfinder.nz/docs/address_cleanse_api/](https://addressfinder.nz/docs/address_cleanse_api/?rc=github-rubygem)
-* [https://addressfinder.com.au/docs/address_cleanse_api/](https://addressfinder.com.au/docs/address_cleanse_api/?rc=github-rubygem)
+For available parameters and example responses, see the API documentation pages for [New Zealand](https://addressfinder.nz/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=New%20Zealand) or [Australia](https://addressfinder.com.au/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=Australia).
 
-Usage example:
+
+#### Address Verification
 
 ```ruby
 result = AddressFinder.cleanse(q: '186 Willis St, Wellington', country: 'nz')
@@ -64,102 +65,78 @@ else
 end
 ```
 
-### Location Search
-
-See documentation on the available parameters and expected response here:
-
-[https://addressfinder.nz/docs/location_api/](https://addressfinder.nz/docs/location_api/?rc=github-rubygem)
-
-Usage example:
-
-```ruby
-begin
-  results = AddressFinder.location_search(q: 'Queen Street')
-  if results.any?
-    $standout.puts "Success: #{results}"
-  else
-    $standout.puts "Sorry, there were no location matches"
-  end
-rescue AddressFinder::RequestRejectedError => e
-  response = JSON.parse(e.body)
-  $standout.puts response['message']
-end
-```
-
-### Location Info
-
-See documentation on the available parameters and expected response here:
-
-[https://addressfinder.nz/docs/location_info_api/](https://addressfinder.nz/docs/location_info_api/?rc=github-rubygem)
-
-Usage example:
-
-```ruby
-begin
-  result = AddressFinder.location_info(pxid: '1-.B.3l')
-  if result
-    $standout.puts "Success: #{result.a}"
-  else
-    $standout.puts "Sorry, can't find that location"
-  end
-rescue AddressFinder::RequestRejectedError => e
-  response = JSON.parse(e.body)
-  $standout.puts response['message']
-end
-```
-
-### Address Search
-
-See documentation on the available parameters and expected response here:
-
-[https://addressfinder.nz/docs/address_api/](https://addressfinder.nz/docs/address_api/?rc=github-rubygem)
-
-Usage example:
+#### Address Autocomplete
 
 ```ruby
 begin
   results = AddressFinder.address_search(q: '186 Willis Street')
   if results.any?
-    $standout.puts "Success: #{results}"
+    $stdout.puts "Success: #{results}"
   else
-    $standout.puts "Sorry, there were no address matches"
+    $stdout.puts "Sorry, there were no address matches"
   end
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
-  $standout.puts response['message']
+  $stdout.puts response['message']
 end
 ```
 
-### Address Info
-
-See documentation on the available parameters and expected response here:
-
-[https://addressfinder.nz/docs/address_info_api/](https://addressfinder.nz/docs/address_info_api/?rc=github-rubygem)
-
-Usage example:
+#### Address Metadata
 
 ```ruby
 begin
   result = AddressFinder.address_info(pxid: '1-.B.3l')
   if result
-    $standout.puts "Success: #{result.a}"
+    $stdout.puts "Success: #{result.a}"
   else
-    $standout.puts "Sorry, can't find that address"
+    $stdout.puts "Sorry, can't find that address"
   end
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
-  $standout.puts response['message']
+  $stdout.puts response['message']
 end
 ```
 
-### Bulk Operations
+#### Location Autocomplete
 
-If you have a series of calls you need to make to AddressFinder, you can use the
-bulk method which re-uses the HTTP connection.
+```ruby
+begin
+  results = AddressFinder.location_search(q: 'Queen Street')
+  if results.any?
+    $stdout.puts "Success: #{results}"
+  else
+    $stdout.puts "Sorry, there were no location matches"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
 
-The bulk method is only available for #cleanse operation.
+#### Location Metadata
 
-Usage example:
+```ruby
+begin
+  result = AddressFinder.location_info(pxid: '1-.B.3l')
+  if result
+    $stdout.puts "Success: #{result.a}"
+  else
+    $stdout.puts "Sorry, can't find that location"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
+
+## Advanced Usage
+
+#### Bulk Operations
+
+If you have a series of API requests, you can use the
+bulk method to re-use the HTTP connection.
+
+**Note:** The bulk method is currently only available for Address Verification (`#cleanse`).
 
 ```ruby
 AddressFinder.bulk do |af|
@@ -175,34 +152,22 @@ AddressFinder.bulk do |af|
 end
 ```
 
-## Advanced Usage
 
-### Key and Secret Override
+#### Key and Secret override
 
-What if you want to use another acccount for a specific query using the AddressFinder gem in your ruby app?
-
-You can override the `api_key` and `api_secret` set in the AddressFinder.configure block in `./config/initializers/addressfinder.rb` when using the AddressFinder gem.
-
-Those AddressFinder methods accept `:key` and `:secret` arguments:
-- `#cleanse`,
-- `#location_search`,
-- `#location_info`,
-- `#address_search`
-- `#address_info`
-
-Usage example:
+What if you want to use another account for a specific query? You can override the `api_key` and `api_secret`.
 
 ```ruby
 begin
   result = AddressFinder.address_info(pxid: '1-.B.3l', key: 'AAAAAAAAAAAAA', secret: 'BBBBBBBBBBBBB')
   if result
-    $standout.puts "Success: #{result.a}"
+    $stdout.puts "Success: #{result.a}"
   else
-    $standout.puts "Sorry, can't find that address"
+    $stdout.puts "Sorry, can't find that address"
   end
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
-  $standout.puts response['message']
+  $stdout.puts response['message']
 end
 ```
 
