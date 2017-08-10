@@ -11,7 +11,7 @@ RSpec.describe AddressFinder::LocationSearch do
 
   describe '#build_request' do
     let(:locator){ AddressFinder::LocationSearch.new(params: args, http: http) }
-    let(:http){ AddressFinder.send(:configure_http) }
+    let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
 
     subject(:request_uri){ locator.send(:build_request) }
 
