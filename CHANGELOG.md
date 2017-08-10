@@ -1,3 +1,7 @@
+# AddressFinder 1.6.0 (August 10, 2017) #
+
+* Add support for a configurable number of request retries
+
 # AddressFinder 1.5.2 (December 21, 2015) #
 
 * Update for the nested response format used in Address Cleanse Australia
