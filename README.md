@@ -65,39 +65,7 @@ else
 end
 ```
 
-#### Location Search
-
-```ruby
-begin
-  results = AddressFinder.location_search(q: 'Queen Street')
-  if results.any?
-    $stdout.puts "Success: #{results}"
-  else
-    $stdout.puts "Sorry, there were no location matches"
-  end
-rescue AddressFinder::RequestRejectedError => e
-  response = JSON.parse(e.body)
-  $stdout.puts response['message']
-end
-```
-
-#### Location Info
-
-```ruby
-begin
-  result = AddressFinder.location_info(pxid: '1-.B.3l')
-  if result
-    $stdout.puts "Success: #{result.a}"
-  else
-    $stdout.puts "Sorry, can't find that location"
-  end
-rescue AddressFinder::RequestRejectedError => e
-  response = JSON.parse(e.body)
-  $stdout.puts response['message']
-end
-```
-
-#### Address Search
+#### Address Autocomplete
 
 ```ruby
 begin
@@ -113,7 +81,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-#### Address Info
+#### Address Metadata
 
 ```ruby
 begin
@@ -122,6 +90,38 @@ begin
     $stdout.puts "Success: #{result.a}"
   else
     $stdout.puts "Sorry, can't find that address"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
+
+#### Location Autocomplete
+
+```ruby
+begin
+  results = AddressFinder.location_search(q: 'Queen Street')
+  if results.any?
+    $stdout.puts "Success: #{results}"
+  else
+    $stdout.puts "Sorry, there were no location matches"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
+
+#### Location Metadata
+
+```ruby
+begin
+  result = AddressFinder.location_info(pxid: '1-.B.3l')
+  if result
+    $stdout.puts "Success: #{result.a}"
+  else
+    $stdout.puts "Sorry, can't find that location"
   end
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
