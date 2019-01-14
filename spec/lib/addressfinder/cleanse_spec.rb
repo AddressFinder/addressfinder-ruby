@@ -71,9 +71,9 @@ RSpec.describe AddressFinder::Cleanse do
     end
 
     context 'with more arguments' do
-      let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', http: http} }
+      let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', census: '2013', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&delivered=true&region_code=A&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&delivered=true&region_code=A&census=2013&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a country override' do
