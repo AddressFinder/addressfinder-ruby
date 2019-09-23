@@ -1,3 +1,7 @@
+# AddressFinder 1.6.2 (September 23, 2019) #
+
+* Add support for an optional state_codes parameter in the Cleanse class
+
 # AddressFinder 1.6.1 (January 14, 2019) #
 
 * Add support for an optional census parameter in the Cleanse class
