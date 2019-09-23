@@ -6,7 +6,14 @@ module AddressFinder
     end
 
     def self.encode_and_join_params(params)
-      params.map{ |k,v| "#{k}=#{encode(v)}" }.join('&')
+      # URI.encode_www_form(params)
+      params.map do |k,v|
+        if v.is_a? Array
+          v.collect {|e| "#{k}[]=#{encode(e)}" }
+        else
+          "#{k}=#{encode(v)}"
+        end
+      end.join('&')
     end
   end
 end

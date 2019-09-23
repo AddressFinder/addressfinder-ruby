@@ -82,6 +82,24 @@ RSpec.describe AddressFinder::Cleanse do
       it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=YYY') }
     end
 
+    context 'with a state codes as an array' do
+      let(:args){ {q: '186 willis st', country: 'au', state_codes: ['ACT','NSW'], http: http} }
+
+      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
+    end
+
+    context 'with a reserved character in the query' do
+      let(:args){ {q: '186=willis st', country: 'au', state_codes: ['ACT','NSW'], http: http} }
+
+      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186%3Dwillis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
+    end
+
+    context 'with a state codes as a string' do
+      let(:args){ {q: '186 willis st', country: 'au', state_codes: 'ACT,NSW', http: http} }
+
+      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&state_codes=ACT%2CNSW&format=json&key=XXX&secret=YYY') }
+    end
+
     context 'with a key override' do
       let(:args){ {q: '186 willis st', key: 'AAA', http: http} }
 
