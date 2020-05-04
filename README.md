@@ -171,3 +171,13 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
+### Testing
+
+You can run all the specs with the following command:
+
+`docker-compose up`
+
+You can `guard` for repeating test runs (while editing new code):
+
+`docker-compose run ruby bundle exec guard`
+
