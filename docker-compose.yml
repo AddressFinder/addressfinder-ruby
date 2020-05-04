@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ruby:
+    build: .
+    volumes:
+      - .:/addressfinder-ruby
+      - bundle-cache:/bundle
+    command: bundle exec rspec
+
+volumes:
+  bundle-cache: {}

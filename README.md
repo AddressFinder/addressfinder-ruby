@@ -65,11 +65,36 @@ else
 end
 ```
 
-#### Address Autocomplete
+#### Address Search
+
+The Address Search API supports the following address sets:
+
+* New Zealand addresses
+* Australian addresses from the GNAF dataset only
 
 ```ruby
 begin
   results = AddressFinder.address_search(q: '186 Willis Street')
+  if results.any?
+    $stdout.puts "Success: #{results}"
+  else
+    $stdout.puts "Sorry, there were no address matches"
+  end
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
+
+#### Address Autocomplete
+
+The Address Autocomplete API supports the following address sets:
+
+* Australian addresses from the GNAF and PAF datasets only
+
+```ruby
+begin
+  results = AddressFinder.address_autocomplete(q: '275 high st, bel', au_paf: '1')
   if results.any?
     $stdout.puts "Success: #{results}"
   else
@@ -170,4 +195,14 @@ rescue AddressFinder::RequestRejectedError => e
   $stdout.puts response['message']
 end
 ```
+
+### Testing
+
+You can run all the specs with the following command:
+
+`docker-compose up`
+
+You can `guard` for repeating test runs (while editing new code):
+
+`docker-compose run ruby bundle exec guard`
 

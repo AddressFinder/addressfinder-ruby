@@ -6,6 +6,7 @@ require 'addressfinder/location_info'
 require 'addressfinder/location_search'
 require 'addressfinder/address_info'
 require 'addressfinder/address_search'
+require 'addressfinder/address_autocomplete'
 require 'addressfinder/bulk'
 require 'addressfinder/errors'
 require 'addressfinder/util'
@@ -41,6 +42,10 @@ module AddressFinder
 
     def address_search(args={})
       AddressFinder::AddressSearch.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.results
+    end
+
+    def address_autocomplete(args={})
+      AddressFinder::AddressAutocomplete.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.results
     end
 
     def address_info(args={})

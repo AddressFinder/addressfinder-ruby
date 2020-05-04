@@ -1,3 +1,7 @@
+# AddressFinder 1.7.0 (May 4, 2020) #
+
+* Add support for Address Autocomplete API (Australia only)
+
 # AddressFinder 1.6.2 (September 23, 2019) #
 
 * Add support for an optional state_codes parameter in the Cleanse class
