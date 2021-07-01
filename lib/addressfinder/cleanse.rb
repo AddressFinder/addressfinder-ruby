@@ -5,11 +5,12 @@ module AddressFinder
 
     attr_reader :result
 
-    def initialize(q:, country: nil, delivered: nil, post_box: nil, rural: nil, region_code: nil, state_codes: nil, census: nil, domain: nil, key: nil, secret: nil, http:)
+    def initialize(q:, country: nil, delivered: nil, post_box: nil, paf: nil, rural: nil, region_code: nil, state_codes: nil, census: nil, domain: nil, key: nil, secret: nil, http:)
       @params = {}
       @params['q'] = q
       @params['delivered'] = delivered if delivered
       @params['post_box'] = post_box if post_box
+      @params['paf'] = paf if paf
       @params['rural'] = rural if rural
       @params['region_code'] = region_code if region_code
       @params['state_codes'] = state_codes if state_codes
