@@ -1,7 +1,7 @@
 require 'ostruct'
 
 module AddressFinder
-  class Cleanse
+  class Verification
 
     attr_reader :result
 
@@ -38,7 +38,7 @@ module AddressFinder
     attr_writer :result
 
     def build_request
-      @request_uri = "/api/#{country}/address/cleanse?#{encoded_params}"
+      @request_uri = "/api/#{country}/address/verification?#{encoded_params}"
     end
 
     def execute_request
