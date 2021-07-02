@@ -65,6 +65,8 @@ else
 end
 ```
 
+**Note:** The deprecated method `cleanse` is still available now but will be dropped in the future.
+
 #### Address Search
 
 The Address Search API supports the following address sets:

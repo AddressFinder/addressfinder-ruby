@@ -1,3 +1,8 @@
+# AddressFinder 1.7.1 (June 2, 2021) #
+
+* Add support for PAF verification
+* Rename cleanse to verification
+
 # AddressFinder 1.7.0 (May 4, 2020) #
 
 * Add support for Address Autocomplete API (Australia only)
