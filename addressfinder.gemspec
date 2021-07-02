@@ -5,11 +5,11 @@ Gem::Specification.new do |gem|
   gem.name          = "addressfinder"
   gem.version       = AddressFinder::VERSION
   gem.licenses      = ['MIT']
-  gem.authors       = ["Nigel Ramsay", "Naiki Pohe", "Sean Arnold", "Alexandre Barret"]
-  gem.email         = ["nigel.ramsay@abletech.co.nz", "naiki.pohe@abletech.co.nz", "seanarnie@gmail.com", "alex@abletech.nz"]
+  gem.authors       = ["Nigel Ramsay", "Naiki Pohe", "Sean Arnold", "Alexandre Barret", "Cassandre Guinut"]
+  gem.email         = ["nigel.ramsay@addressfinder.nz", "naiki.pohe@abletech.co.nz", "seanarnie@gmail.com", "alex@abletech.nz", "cassandre.guinut@addressfinder.nz"]
   gem.description   = %q{Ruby client library for AddressFinder}
   gem.summary       = %q{Provides easy access to AddressFinder APIs}
-  gem.homepage      = "https://github.com/AbleTech/addressfinder-ruby"
+  gem.homepage      = "https://github.com/AddressFinder/addressfinder-ruby"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
