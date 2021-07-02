@@ -1,7 +1,7 @@
 # AddressFinder Ruby Gem
 
 [![Gem Version](https://badge.fury.io/rb/addressfinder.svg)](http://badge.fury.io/rb/addressfinder)
-[![Build  Status](https://travis-ci.org/AbleTech/addressfinder-ruby.svg)](https://travis-ci.org/AbleTech/addressfinder-ruby)
+[![Build  Status](https://travis-ci.com/github/AddressFinder/addressfinder-ruby.svg)](https://travis-ci.com/github/AddressFinder/addressfinder-ruby)
 
 A client library for accessing the [AddressFinder](https://addressfinder.nz/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder) APIs.
 
@@ -56,7 +56,7 @@ For available parameters and example responses, see the API documentation pages 
 #### Address Verification
 
 ```ruby
-result = AddressFinder.cleanse(q: '186 Willis St, Wellington', country: 'nz')
+result = AddressFinder.verification(q: '186 Willis St, Wellington', country: 'nz')
 
 if result
   $stdout.puts "Success: #{result.postal}"
@@ -64,6 +64,8 @@ else
   $stdout.puts "Sorry, can't find that address"
 end
 ```
+
+**Note:** The deprecated method `cleanse` is still available now but will be dropped in the future.
 
 #### Address Search
 
@@ -161,12 +163,12 @@ end
 If you have a series of API requests, you can use the
 bulk method to re-use the HTTP connection.
 
-**Note:** The bulk method is currently only available for Address Verification (`#cleanse`).
+**Note:** The bulk method is currently only available for Address Verification (`#verification`).
 
 ```ruby
 AddressFinder.bulk do |af|
   CSV.foreach('auckland_addresses.csv') do |row|
-    result = af.cleanse(q: row[0], region_code: '1')
+    result = af.verification(q: row[0], region_code: '1')
 
     if result
       $stdout.puts "Success: #{result.postal}"
@@ -205,4 +207,3 @@ You can run all the specs with the following command:
 You can `guard` for repeating test runs (while editing new code):
 
 `docker-compose run ruby bundle exec guard`
-

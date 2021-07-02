@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe AddressFinder::Cleanse do
+RSpec.describe AddressFinder::Verification do
   before do
     AddressFinder.configure do |af|
       af.api_key = 'XXX'
@@ -11,7 +11,7 @@ RSpec.describe AddressFinder::Cleanse do
     end
   end
 
-  let(:cleanser){ AddressFinder::Cleanse.new(args) }
+  let(:verification_module){ AddressFinder::Verification.new(args) }
   let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
   let(:net_http){ http.send(:net_http) }
 
@@ -21,7 +21,7 @@ RSpec.describe AddressFinder::Cleanse do
     before do
       WebMock.allow_net_connect!(net_http_connect_on_start: true)
       allow(http).to receive(:sleep)
-      allow(cleanser).to receive(:request_uri).and_return("/test/path")
+      allow(verification_module).to receive(:request_uri).and_return("/test/path")
       expect(http).to_not receive(:re_establish_connection)
     end
 
@@ -29,7 +29,7 @@ RSpec.describe AddressFinder::Cleanse do
       WebMock.disable_net_connect!
     end
 
-    subject(:execute_request){ cleanser.send(:execute_request) }
+    subject(:execute_request){ verification_module.send(:execute_request) }
 
     it "retries an errored request another time before succeeding" do
       expect(net_http).to receive(:do_start).twice.and_call_original
@@ -62,60 +62,60 @@ RSpec.describe AddressFinder::Cleanse do
   end
 
   describe '#build_request' do
-    subject(:request_uri){ cleanser.send(:build_request) }
+    subject(:request_uri){ verification_module.send(:build_request) }
 
     context 'with minimal arguments' do
       let(:args){ {q: '186 willis st', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with more arguments' do
-      let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', census: '2013', http: http} }
+      let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', paf: '1', census: '2013', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&delivered=true&region_code=A&census=2013&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&delivered=true&paf=1&region_code=A&census=2013&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a country override' do
       let(:args){ {q: '186 willis st', country: 'au', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a state codes as an array' do
       let(:args){ {q: '186 willis st', country: 'au', state_codes: ['ACT','NSW'], http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a reserved character in the query' do
       let(:args){ {q: '186=willis st', country: 'au', state_codes: ['ACT','NSW'], http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186%3Dwillis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186%3Dwillis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a state codes as a string' do
       let(:args){ {q: '186 willis st', country: 'au', state_codes: 'ACT,NSW', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/cleanse?q=186+willis+st&state_codes=ACT%2CNSW&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&state_codes=ACT%2CNSW&format=json&key=XXX&secret=YYY') }
     end
 
     context 'with a key override' do
       let(:args){ {q: '186 willis st', key: 'AAA', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&format=json&key=AAA&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&format=json&key=AAA&secret=YYY') }
     end
 
     context 'with a secret override' do
       let(:args){ {q: '186 willis st', secret: 'BBB', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=186+willis+st&format=json&key=XXX&secret=BBB') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&format=json&key=XXX&secret=BBB') }
     end
 
     context 'with a domain given' do
       let(:args){ {q: '123', domain: 'testdomain.com', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/cleanse?q=123&domain=testdomain.com&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=123&domain=testdomain.com&format=json&key=XXX&secret=YYY') }
 
       context 'given in the AF configuration' do
 
@@ -123,7 +123,7 @@ RSpec.describe AddressFinder::Cleanse do
 
         it 'should use the config domain if set' do
           AddressFinder.configuration.domain = 'anotherdomain.com'
-          expect(request_uri).to eq('/api/nz/address/cleanse?q=123&domain=anotherdomain.com&format=json&key=XXX&secret=YYY')
+          expect(request_uri).to eq('/api/nz/address/verification?q=123&domain=anotherdomain.com&format=json&key=XXX&secret=YYY')
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end
@@ -134,17 +134,17 @@ RSpec.describe AddressFinder::Cleanse do
     let(:args){ {q: 'ignored', http: nil} }
 
     before do
-      cleanser.send('response_body=', body)
-      cleanser.send('response_status=', status)
+      verification_module.send('response_body=', body)
+      verification_module.send('response_status=', status)
     end
 
-    subject(:result){ cleanser.send(:build_result) }
+    subject(:result){ verification_module.send(:build_result) }
 
     context 'with a successful nz result' do
       let(:body){ '{"matched": true, "postal_address": "Texas"}' }
       let(:status){ '200' }
 
-      it { expect(result.class).to eq(AddressFinder::Cleanse::Result) }
+      it { expect(result.class).to eq(AddressFinder::Verification::Result) }
 
       it { expect(result.matched).to eq(true) }
 
@@ -155,7 +155,7 @@ RSpec.describe AddressFinder::Cleanse do
       let(:body){ %Q({"matched": true, "success": true, "address": {"full_address": "Texas"}}) }
       let(:status){ '200' }
 
-      it { expect(result.class).to eq(AddressFinder::Cleanse::Result) }
+      it { expect(result.class).to eq(AddressFinder::Verification::Result) }
 
       it { expect(result.full_address).to eq("Texas") }
     end
