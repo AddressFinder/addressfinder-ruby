@@ -56,7 +56,7 @@ For available parameters and example responses, see the API documentation pages 
 #### Address Verification
 
 ```ruby
-result = AddressFinder.cleanse(q: '186 Willis St, Wellington', country: 'nz')
+result = AddressFinder.verification(q: '186 Willis St, Wellington', country: 'nz')
 
 if result
   $stdout.puts "Success: #{result.postal}"
@@ -161,12 +161,12 @@ end
 If you have a series of API requests, you can use the
 bulk method to re-use the HTTP connection.
 
-**Note:** The bulk method is currently only available for Address Verification (`#cleanse`).
+**Note:** The bulk method is currently only available for Address Verification (`#verification`).
 
 ```ruby
 AddressFinder.bulk do |af|
   CSV.foreach('auckland_addresses.csv') do |row|
-    result = af.cleanse(q: row[0], region_code: '1')
+    result = af.verification(q: row[0], region_code: '1')
 
     if result
       $stdout.puts "Success: #{result.postal}"

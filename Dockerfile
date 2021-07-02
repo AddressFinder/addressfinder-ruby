@@ -15,9 +15,9 @@ ENV BUNDLE_PATH /bundle
 ENV INSTALL_PATH /addressfinder-ruby
 RUN mkdir -p $INSTALL_PATH
 
-# Create address cleansing directories
-RUN mkdir -p $INSTALL_PATH/cleansing/originals
-RUN mkdir -p $INSTALL_PATH/cleansing/cleansed
+# Create address verification directories
+RUN mkdir -p $INSTALL_PATH/verification/originals
+RUN mkdir -p $INSTALL_PATH/verification/verified
 
 # This sets the context of where commands will be ran in and is documented
 # on Docker's website extensively.
@@ -25,4 +25,4 @@ WORKDIR $INSTALL_PATH
 
 ADD . $INSTALL_PATH
 
-RUN bundle install 
+RUN bundle install

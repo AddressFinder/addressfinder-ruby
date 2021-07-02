@@ -1,7 +1,7 @@
 require 'multi_json'
 require 'addressfinder/version'
 require 'addressfinder/configuration'
-require 'addressfinder/cleanse'
+require 'addressfinder/verification'
 require 'addressfinder/location_info'
 require 'addressfinder/location_search'
 require 'addressfinder/address_info'
@@ -28,8 +28,12 @@ module AddressFinder
       @configuration ||= AddressFinder::Configuration.new
     end
 
-    def cleanse(args={})
-      AddressFinder::Cleanse.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+    def cleanse(args={}) # We are keeping this method for backward compatibility
+      AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+    end
+
+    def verification(args={})
+      AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
     end
 
     def location_search(args={})
