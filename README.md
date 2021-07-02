@@ -1,7 +1,7 @@
 # AddressFinder Ruby Gem
 
 [![Gem Version](https://badge.fury.io/rb/addressfinder.svg)](http://badge.fury.io/rb/addressfinder)
-[![Build  Status](https://travis-ci.org/AddressFinder/addressfinder-ruby.svg)](https://travis-ci.org/AddressFinder/addressfinder-ruby)
+[![Build  Status](https://travis-ci.com/github/AddressFinder/addressfinder-ruby.svg)](https://travis-ci.com/github/AddressFinder/addressfinder-ruby)
 
 A client library for accessing the [AddressFinder](https://addressfinder.nz/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder) APIs.
 
@@ -205,4 +205,3 @@ You can run all the specs with the following command:
 You can `guard` for repeating test runs (while editing new code):
 
 `docker-compose run ruby bundle exec guard`
-
