@@ -5,20 +5,41 @@ module AddressFinder
 
     attr_reader :result
 
-    def initialize(q:, country: nil, delivered: nil, post_box: nil, paf: nil, rural: nil, region_code: nil, state_codes: nil, census: nil, domain: nil, key: nil, secret: nil, http:)
-      @params = {}
+    # AU expected attributes:
+    # params[:q] --> the address query,
+    # params[:gnaf] --> nil or '1',
+    # params[:paf] --> nil or '1',
+    # params[:state_codes] --> string or array of strings: i.e.,['ACT', 'NSW'],
+    # params[:census] --> '2011' or '2016' or nil,
+    # params[:gps] --> nil or '1',
+    # params[:post_box] --> nil or '0'
+
+    # NZ expected attributes:
+    # params[:q] --> the address query,
+    # params[:delivered] --> '0', '1', or nil,
+    # params[:post_box] --> '0', '1', or nil,
+    # params[:rural] --> '0', '1', or nil,
+    # params[:region_code] --> string, see options on addressfinder.nz or nil,
+    # params[:census] --> '2013', '2018' or nil
+    def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil, gps: nil, state_codes: nil, delivered: nil, rural: nil, region_code: nil, country: nil, http:)
+      @params = {}\
+      # Common to AU and NZ
       @params['q'] = q
-      @params['delivered'] = delivered if delivered
       @params['post_box'] = post_box if post_box
-      @params['paf'] = paf if paf
-      @params['rural'] = rural if rural
-      @params['region_code'] = region_code if region_code
-      @params['state_codes'] = state_codes if state_codes
       @params['census'] = census if census
       @params['domain'] = domain || config.domain if (domain || config.domain)
-      @params['format'] = 'json'
       @params['key'] = key || config.api_key
       @params['secret'] = secret || config.api_secret
+      @params['format'] = 'json'
+      # AU params
+      @params['paf'] = paf if paf
+      @params['gnaf'] = gnaf if gnaf
+      @params['gps'] = gps if gps
+      @params['state_codes'] = state_codes if state_codes
+      # NZ params
+      @params['delivered'] = delivered if delivered
+      @params['rural'] = rural if rural
+      @params['region_code'] = region_code if region_code
       @country = country || config.default_country
       @http = http
     end
@@ -38,6 +59,7 @@ module AddressFinder
     attr_writer :result
 
     def build_request
+      # TODO switch to V2 here for AU
       @request_uri = "/api/#{country}/address/verification?#{encoded_params}"
     end
 
