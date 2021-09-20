@@ -6,6 +6,7 @@ RSpec.describe AddressFinder::Verification do
       af.api_key = 'XXX'
       af.api_secret = 'YYY'
       af.default_country = 'nz'
+      af.verification_version = 'v1'
       af.timeout = 5
       af.retries = 3
     end
@@ -67,55 +68,55 @@ RSpec.describe AddressFinder::Verification do
     context 'with minimal arguments' do
       let(:args){ {q: '186 willis st', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&key=XXX&secret=YYY&format=json') }
     end
 
     context 'with more arguments' do
-      let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', paf: '1', census: '2013', http: http} }
+      let(:args){ {q: '186 willis st', delivered: true, region_code: 'A', census: '2013', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&delivered=true&paf=1&region_code=A&census=2013&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&census=2013&key=XXX&secret=YYY&delivered=true&region_code=A&format=json') }
     end
 
     context 'with a country override' do
       let(:args){ {q: '186 willis st', country: 'au', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&key=XXX&secret=YYY&format=json') }
     end
 
     context 'with a state codes as an array' do
       let(:args){ {q: '186 willis st', country: 'au', state_codes: ['ACT','NSW'], http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&key=XXX&secret=YYY&state_codes[]=ACT&state_codes[]=NSW&format=json') }
     end
 
     context 'with a reserved character in the query' do
       let(:args){ {q: '186=willis st', country: 'au', state_codes: ['ACT','NSW'], http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/verification?q=186%3Dwillis+st&state_codes[]=ACT&state_codes[]=NSW&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186%3Dwillis+st&key=XXX&secret=YYY&state_codes[]=ACT&state_codes[]=NSW&format=json') }
     end
 
     context 'with a state codes as a string' do
       let(:args){ {q: '186 willis st', country: 'au', state_codes: 'ACT,NSW', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&state_codes=ACT%2CNSW&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/au/address/verification?q=186+willis+st&key=XXX&secret=YYY&state_codes=ACT%2CNSW&format=json') }
     end
 
     context 'with a key override' do
       let(:args){ {q: '186 willis st', key: 'AAA', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&format=json&key=AAA&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&key=AAA&secret=YYY&format=json') }
     end
 
     context 'with a secret override' do
       let(:args){ {q: '186 willis st', secret: 'BBB', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&format=json&key=XXX&secret=BBB') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=186+willis+st&key=XXX&secret=BBB&format=json') }
     end
 
     context 'with a domain given' do
       let(:args){ {q: '123', domain: 'testdomain.com', http: http} }
 
-      it { expect(request_uri).to eq('/api/nz/address/verification?q=123&domain=testdomain.com&format=json&key=XXX&secret=YYY') }
+      it { expect(request_uri).to eq('/api/nz/address/verification?q=123&domain=testdomain.com&key=XXX&secret=YYY&format=json') }
 
       context 'given in the AF configuration' do
 
@@ -123,7 +124,7 @@ RSpec.describe AddressFinder::Verification do
 
         it 'should use the config domain if set' do
           AddressFinder.configuration.domain = 'anotherdomain.com'
-          expect(request_uri).to eq('/api/nz/address/verification?q=123&domain=anotherdomain.com&format=json&key=XXX&secret=YYY')
+          expect(request_uri).to eq('/api/nz/address/verification?q=123&domain=anotherdomain.com&key=XXX&secret=YYY&format=json')
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end

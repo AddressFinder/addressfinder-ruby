@@ -33,7 +33,11 @@ module AddressFinder
     end
 
     def verification(args={})
-      AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      if configuration.verification_version.downcase == "v2"
+        AddressFinder::V2::Au::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      else
+        AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      end
     end
 
     def location_search(args={})
