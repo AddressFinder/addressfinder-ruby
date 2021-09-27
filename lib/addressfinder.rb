@@ -2,6 +2,7 @@ require 'multi_json'
 require 'addressfinder/version'
 require 'addressfinder/configuration'
 require 'addressfinder/verification'
+require 'addressfinder/v2/au/verification'
 require 'addressfinder/location_info'
 require 'addressfinder/location_search'
 require 'addressfinder/address_info'
@@ -33,7 +34,11 @@ module AddressFinder
     end
 
     def verification(args={})
-      AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      if configuration.verification_version&.downcase == "v2"
+        AddressFinder::V2::Au::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      else
+        AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      end
     end
 
     def location_search(args={})

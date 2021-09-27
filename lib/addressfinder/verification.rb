@@ -5,21 +5,40 @@ module AddressFinder
 
     attr_reader :result
 
-    def initialize(q:, country: nil, delivered: nil, post_box: nil, paf: nil, rural: nil, region_code: nil, state_codes: nil, census: nil, domain: nil, key: nil, secret: nil, http:)
+    # AU V1 expected attributes:
+    # params[:state_codes] --> string or array of strings: i.e.,['ACT', 'NSW'],
+    # params[:census] --> '2011' or '2016' or nil,
+
+    # NZ expected attributes:
+    # params[:delivered] --> '0', '1', or nil,
+    # params[:post_box] --> '0', '1', or nil,
+    # params[:rural] --> '0', '1', or nil,
+    # params[:region_code] --> string, see options on addressfinder.nz or nil,
+    # params[:census] --> '2013', '2018' or nil
+
+    # Combined attributes
+    # params[:q] --> the address query,
+    # params[:domain] --> used for reporting does not affect query results
+    # params[:key] --> unique AddressFinder public key
+    # params[:secret] --> unique AddressFinder secret key
+    def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, state_codes: nil, delivered: nil, rural: nil, region_code: nil, country: nil, http:)
       @params = {}
+      # Common to AU and NZ
       @params['q'] = q
-      @params['delivered'] = delivered if delivered
       @params['post_box'] = post_box if post_box
-      @params['paf'] = paf if paf
-      @params['rural'] = rural if rural
-      @params['region_code'] = region_code if region_code
-      @params['state_codes'] = state_codes if state_codes
       @params['census'] = census if census
       @params['domain'] = domain || config.domain if (domain || config.domain)
-      @params['format'] = 'json'
       @params['key'] = key || config.api_key
       @params['secret'] = secret || config.api_secret
+      # AU params
+      @params['state_codes'] = state_codes if state_codes
+      # NZ params
+      @params['delivered'] = delivered if delivered
+      @params['rural'] = rural if rural
+      @params['region_code'] = region_code if region_code
       @country = country || config.default_country
+
+      @params['format'] = 'json'
       @http = http
     end
 

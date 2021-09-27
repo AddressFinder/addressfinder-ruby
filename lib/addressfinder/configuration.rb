@@ -2,6 +2,7 @@ module AddressFinder
   class Configuration
     attr_accessor :api_key
     attr_accessor :api_secret
+    attr_accessor :verification_version
     attr_accessor :hostname
     attr_accessor :port
     attr_accessor :proxy_host
@@ -21,6 +22,7 @@ module AddressFinder
       self.retries = 12
       self.retry_delay = 5
       self.default_country = 'nz'
+      self.verification_version = 'v1'
     end
   end
 end
