@@ -18,7 +18,7 @@ module AddressFinder
         # params[:gnaf] --> nil or '1',
         # params[:gps] --> nil or '1',
         # params[:state_codes] --> string or array of strings: i.e.,['ACT', 'NSW'],
-        def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil, gps: nil, state_codes: nil, http:)
+        def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil, gps: nil, state_codes: nil, http:, country: nil)
           @params = {}
           @params['q'] = q
           @params['post_box'] = post_box if post_box
