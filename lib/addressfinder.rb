@@ -62,7 +62,7 @@ module AddressFinder
     end
 
     def bulk(&block)
-      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), &block).perform
+      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, &block).perform
     end
   end
 end

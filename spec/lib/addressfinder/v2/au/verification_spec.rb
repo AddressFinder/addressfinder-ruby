@@ -141,9 +141,9 @@ RSpec.describe AddressFinder::V2::Au::Verification do
     end
 
     context 'with a all args included request' do
-      let(:args){ {q: '186 willis st', paf: '1', gnaf:'1', post_box:'0', state_codes:'ACT', census: '2016', domain: 'mysite.com', gps: '1', http: http} }
+      let(:args){ {q: '186 willis st', paf: '1', gnaf:'1', post_box:'0', state_codes:'ACT', census: '2016', domain: 'mysite.com', gps: '1', ext: '1', http: http} }
 
-      it { expect(request_uri).to eq('/api/au/address/v2/verification?q=186+willis+st&post_box=0&census=2016&domain=mysite.com&key=XXX&secret=YYY&paf=1&gnaf=1&gps=1&state_codes=ACT&format=json') }
+      it { expect(request_uri).to eq('/api/au/address/v2/verification?q=186+willis+st&post_box=0&census=2016&domain=mysite.com&key=XXX&secret=YYY&paf=1&gnaf=1&gps=1&ext=1&state_codes=ACT&format=json') }
     end
   end
 

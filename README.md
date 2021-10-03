@@ -31,6 +31,7 @@ AddressFinder.configure do |af|
 
   # Optional
   af.default_country = 'nz' # default: nz
+  af.verification_version = 'v2' # default: v1
   af.timeout = 10 # default: 10 seconds
   af.retries = 12 # default: 12
   af.retry_delay = 5 # default: 5 seconds

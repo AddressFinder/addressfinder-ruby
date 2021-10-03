@@ -1,3 +1,9 @@
+# AddressFinder 1.8.0 (October 2021) #
+
+* Create a V2 API for verification (Australia)
+* Remove PAF support from V1 verification API (Australia)
+* Include API version number in configuration
+
 # AddressFinder 1.7.1 (June 2, 2021) #
 
 * Add support for PAF verification
