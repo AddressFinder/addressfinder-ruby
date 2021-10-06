@@ -17,9 +17,9 @@ module AddressFinder
         # params[:paf] --> nil or '1',
         # params[:gnaf] --> nil or '1',
         # params[:gps] --> nil or '1',
-        # params[:ext] --> nil or '1',
+        # params[:extended] --> nil or '1',
         # params[:state_codes] --> string or array of strings: i.e.,['ACT', 'NSW'],
-        def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil, gps: nil, state_codes: nil, ext: nil, http:, country: nil)
+        def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil, gps: nil, state_codes: nil, extended: nil, http:, country: nil)
           @params = {}
           @params['q'] = q
           @params['post_box'] = post_box if post_box
@@ -30,7 +30,7 @@ module AddressFinder
           @params['paf'] = paf if paf
           @params['gnaf'] = gnaf if gnaf
           @params['gps'] = gps if gps
-          @params['ext'] = ext if ext
+          @params['extended'] = extended if extended
           @params['state_codes'] = state_codes if state_codes
 
           @params['format'] = 'json'
