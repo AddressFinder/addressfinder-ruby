@@ -38,7 +38,31 @@ RSpec.describe AddressFinder::Bulk do
         expect(net_http).to receive(:do_start).once.and_call_original
         expect(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
         expect(net_http).to receive(:do_finish).once.and_call_original
-        AddressFinder::Bulk.new(http: http, verification_version: 'v2', &block).perform
+        AddressFinder::Bulk.new(http: http, verification_version: 'v2', default_country: 'au', &block).perform
+      end
+
+      it "calls the correct class with v2 verification and au default" do
+        allow(net_http).to receive(:do_start).once.and_call_original
+        allow(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        allow(net_http).to receive(:do_finish).once.and_call_original
+        expect(AddressFinder::V2::Au::Verification).to receive(:new).exactly(3).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: 'v2', default_country: 'au', &block).perform
+      end
+
+      it "calls the correct class with v2 verification and nz default" do
+        allow(net_http).to receive(:do_start).once.and_call_original
+        allow(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        allow(net_http).to receive(:do_finish).once.and_call_original
+        expect(AddressFinder::Verification).to receive(:new).exactly(3).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: 'v2', default_country: 'nz', &block).perform
+      end
+
+      it "calls the correct class without a verification version" do
+        allow(net_http).to receive(:do_start).once.and_call_original
+        allow(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        allow(net_http).to receive(:do_finish).once.and_call_original
+        expect(AddressFinder::Verification).to receive(:new).exactly(3).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: nil, default_country: 'au', &block).perform
       end
 
       it "re-establishes the http connection and continues where we left off when a Net::OpenTimeout, Net::ReadTimeout or SocketError is raised" do
@@ -50,7 +74,7 @@ RSpec.describe AddressFinder::Bulk do
         expect(net_http).to receive(:transport_request).once.and_raise(SocketError) # Retry 2 Willis (error)
         expect(net_http).to receive(:transport_request).exactly(2).and_return(response) # Retry 2 Willis (success) & 3 Willis (success)
         expect(net_http).to receive(:do_finish).exactly(4).times.and_call_original
-        AddressFinder::Bulk.new(http: http, verification_version: 'v2', &block).perform
+        AddressFinder::Bulk.new(http: http, verification_version: 'v2', default_country: 'au', &block).perform
       end
     end
 
@@ -66,7 +90,25 @@ RSpec.describe AddressFinder::Bulk do
         expect(net_http).to receive(:do_start).once.and_call_original
         expect(net_http).to receive(:transport_request).once.and_return(response)
         expect(net_http).to receive(:do_finish).once.and_call_original
-        AddressFinder::Bulk.new(http: http, verification_version: 'v2', &block).perform
+        expect(AddressFinder::Verification).to receive(:new).exactly(1).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: nil, default_country: 'au', &block).perform
+      end
+    end
+
+    context "with a country override and v2 in the config" do
+      let(:response){ double(:response, body: %Q({"success": true}), code: "200") }
+      let(:block){
+        Proc.new do |proxy|
+          proxy.verification(q: "1 Willis", country: "au")
+        end
+      }
+
+      it "has the same behaviour as the verification method" do
+        expect(net_http).to receive(:do_start).once.and_call_original
+        expect(net_http).to receive(:transport_request).once.and_return(response)
+        expect(net_http).to receive(:do_finish).once.and_call_original
+        expect(AddressFinder::V2::Au::Verification).to receive(:new).exactly(1).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: "v2", default_country: 'nz', &block).perform
       end
     end
   end

@@ -47,7 +47,7 @@ module AddressFinder
 
         private
 
-        attr_reader :request_uri, :params, :country, :http
+        attr_reader :request_uri, :params, :http
         attr_accessor :response_body, :response_status
         attr_writer :result
 
