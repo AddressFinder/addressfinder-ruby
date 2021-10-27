@@ -34,7 +34,7 @@ module AddressFinder
     end
 
     def verification(args={})
-      if configuration.verification_version&.downcase == "v2"
+      if (args[:country] || configuration.default_country) == 'au' && configuration.verification_version&.downcase == "v2"
         AddressFinder::V2::Au::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
       else
         AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
@@ -62,7 +62,7 @@ module AddressFinder
     end
 
     def bulk(&block)
-      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, &block).perform
+      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, default_country: configuration.default_country, &block).perform
     end
   end
 end
