@@ -1,6 +1,10 @@
+# AddressFinder 1.8.1 (October 2021) #
+
+* Prevent NZ bulk and verification calls from using V2 module
+
 # AddressFinder 1.8.0 (October 2021) #
 
-* Create a V2 API for verification (Australia)
+* Create a V2 Module for verification (Australia)
 * Remove PAF support from V1 verification API (Australia)
 * Include API version number in configuration
 
