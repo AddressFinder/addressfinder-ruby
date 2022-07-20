@@ -1,3 +1,8 @@
+# AddressFinder 1.9.0 (July 2022) #
+
+* Add support for Ruby 3.x
+* Update gem dependencies
+
 # AddressFinder 1.8.1 (October 2021) #
 
 * Prevent NZ bulk and verification calls from using V2 module
