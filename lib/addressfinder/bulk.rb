@@ -25,14 +25,14 @@ module AddressFinder
       end
 
       def cleanse(args={})
-        AddressFinder::Verification.new(args.merge(http: http)).perform.result
+        AddressFinder::Verification.new(**args.merge(http: http)).perform.result
       end
 
       def verification(args={})
         if verification_version&.downcase == "v2" && (args[:country] || default_country) == 'au'
-          AddressFinder::V2::Au::Verification.new(args.merge(http: http)).perform.result
+          AddressFinder::V2::Au::Verification.new(**args.merge(http: http)).perform.result
         else
-          AddressFinder::Verification.new(args.merge(http: http)).perform.result
+          AddressFinder::Verification.new(**args.merge(http: http)).perform.result
         end
       end
 
