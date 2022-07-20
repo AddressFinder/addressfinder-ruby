@@ -11,7 +11,7 @@ RSpec.describe AddressFinder::Verification do
     end
   end
 
-  let(:verification_module){ AddressFinder::Verification.new(args) }
+  let(:verification_module){ AddressFinder::Verification.new(**args) }
   let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
   let(:net_http){ http.send(:net_http) }
 
