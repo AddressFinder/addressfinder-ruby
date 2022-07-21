@@ -1,5 +1,5 @@
-# Use the barebones version of Ruby 2.6.1
-FROM ruby:2.6
+# Use the barebones version of Ruby 2.7.x
+FROM ruby:2.7
 
 # Install dependencies:
 # - build-essential: To ensure certain gems can be compiled
