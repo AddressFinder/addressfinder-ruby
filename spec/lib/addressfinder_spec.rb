@@ -29,12 +29,22 @@ RSpec.describe AddressFinder do
         expect(AddressFinder::Verification).to receive_message_chain(:new, :perform, :result)
         subject
       end
+
+      it "safely passes arguments through" do
+        stub_request(:get, Addressable::Template.new("https://api.addressfinder.io/api/nz/address/verification{?args*}")).to_return(:status => 200, :body => "{}", :headers => {})
+        subject
+      end
     end
 
     context "with country set to au" do
       let(:args){ {country: "au", q: "12 high street sydney"} }
       it "calls the v2::Au class" do
         expect(AddressFinder::V2::Au::Verification).to receive_message_chain(:new, :perform, :result)
+        subject
+      end
+
+      it "safely passes arguments through" do
+        stub_request(:get, Addressable::Template.new("https://api.addressfinder.io/api/au/address/v2/verification{?args*}")).to_return(:status => 200, :body => "{}", :headers => {})
         subject
       end
     end
