@@ -1,3 +1,7 @@
+# AddressFinder 1.9.1 (October 2022) #
+
+* Add missing kwarg `**` for ruby 3
+
 # AddressFinder 1.9.0 (July 2022) #
 
 * Add support for Ruby 3.x
