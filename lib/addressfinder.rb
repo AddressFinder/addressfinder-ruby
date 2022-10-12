@@ -30,14 +30,14 @@ module AddressFinder
     end
 
     def cleanse(args={}) # We are keeping this method for backward compatibility
-      AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      AddressFinder::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
     end
 
     def verification(args={})
       if (args[:country] || configuration.default_country) == 'au' && configuration.verification_version&.downcase == "v2"
-        AddressFinder::V2::Au::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+        AddressFinder::V2::Au::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
       else
-        AddressFinder::Verification.new(args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+        AddressFinder::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
       end
     end
 
