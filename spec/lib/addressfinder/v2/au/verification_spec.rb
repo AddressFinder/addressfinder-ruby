@@ -116,7 +116,7 @@ RSpec.describe AddressFinder::V2::Au::Verification do
 
         it 'should use the config domain if set' do
           AddressFinder.configuration.domain = 'anotherdomain.com'
-          # expect(request_uri).to eq('/api/au/address/v2/verification?q=123&domain=anotherdomain.com&key=XXX&secret=YYY&format=json')
+          expect(request_uri).to eq('/api/au/address/v2/verification?q=123&domain=anotherdomain.com&key=XXX&secret=YYY&format=json')
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end

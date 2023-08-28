@@ -71,4 +71,14 @@ RSpec.describe AddressFinder do
       end
     end
   end
+
+  context "#email_verification" do
+    subject(:verification) { AddressFinder.email_verification(args) }
+    let(:args){ {email: "john.doe@addressfinder.com"} }
+
+    it "calls the email verification class" do
+      expect(AddressFinder::Email::Verification).to receive_message_chain(:new, :perform, :result)
+      subject
+    end
+  end
 end

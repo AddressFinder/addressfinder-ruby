@@ -1,3 +1,8 @@
+# AddressFinder 1.9.2 (August 2023) #
+
+* Add support for Email Verification
+* Add support for Bulk Email Verification
+
 # AddressFinder 1.9.1 (October 2022) #
 
 * Add missing kwarg `**` for ruby 3

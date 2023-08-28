@@ -111,5 +111,51 @@ RSpec.describe AddressFinder::Bulk do
         AddressFinder::Bulk.new(http: http, verification_version: "v2", default_country: 'nz', &block).perform
       end
     end
+
+    context "email verification with 3 requests in the provided block" do
+      let(:response){ double(:response, body: %Q({"success": true}), code: "200") }
+      let(:block){
+        Proc.new do |proxy|
+          proxy.email_verification(email: "john.doe@addressfinder.com")
+          proxy.email_verification(email: "jane.doe@addressfinder.com")
+          proxy.email_verification(email: "tom.doe@addressfinder.com")
+        end
+      }
+
+      it "uses 1 http connection" do
+        expect(net_http).to receive(:do_start).once.and_call_original
+        expect(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        expect(net_http).to receive(:do_finish).once.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: 'v1', default_country: 'nz', &block).perform
+      end
+
+      it "calls the correct class with v1 verification and nz default" do
+        allow(net_http).to receive(:do_start).once.and_call_original
+        allow(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        allow(net_http).to receive(:do_finish).once.and_call_original
+        expect(AddressFinder::Email::Verification).to receive(:new).exactly(3).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: 'v1', default_country: 'nz', &block).perform
+      end
+
+      it "calls the correct class without a verification version or default country" do
+        allow(net_http).to receive(:do_start).once.and_call_original
+        allow(net_http).to receive(:transport_request).exactly(3).times.and_return(response)
+        allow(net_http).to receive(:do_finish).once.and_call_original
+        expect(AddressFinder::Email::Verification).to receive(:new).exactly(3).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: nil, default_country: nil, &block).perform
+      end
+
+      it "re-establishes the http connection and continues where we left off when a Net::OpenTimeout, Net::ReadTimeout or SocketError is raised" do
+        expect(http).to receive(:re_establish_connection).exactly(3).times.and_call_original
+        expect(net_http).to receive(:do_start).exactly(4).times.and_call_original
+        expect(net_http).to receive(:transport_request).once.and_return(response) # john.doe@addressfinder.com (success)
+        expect(net_http).to receive(:transport_request).once.and_raise(Net::OpenTimeout) # jane.doe@addressfinder.com (error)
+        expect(net_http).to receive(:transport_request).once.and_raise(Net::ReadTimeout) # Retry jane.doe@addressfinder.com (error)
+        expect(net_http).to receive(:transport_request).once.and_raise(SocketError) # Retry jane.doe@addressfinder.com (error)
+        expect(net_http).to receive(:transport_request).exactly(2).and_return(response) # Retry jane.doe@addressfinder.com (success) & tom.doe@addressfinder.com (success)
+        expect(net_http).to receive(:do_finish).exactly(4).times.and_call_original
+        AddressFinder::Bulk.new(http: http, verification_version: 'v1', default_country: 'nz', &block).perform
+      end
+    end
   end
 end
