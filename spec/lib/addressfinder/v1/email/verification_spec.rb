@@ -1,10 +1,10 @@
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe AddressFinder::V1::Email::Verification do
   before do
     AddressFinder.configure do |af|
-      af.api_key = 'XXX'
-      af.api_secret = 'YYY'
+      af.api_key = "XXX"
+      af.api_secret = "YYY"
       af.timeout = 5
       af.retries = 3
     end
@@ -14,7 +14,7 @@ RSpec.describe AddressFinder::V1::Email::Verification do
   let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
   let(:net_http){ http.send(:net_http) }
 
-  describe '#execute_request' do
+  describe "#execute_request" do
     let(:args){ {email: "john.doe@addressfinder.com", http: http} }
 
     before do
@@ -60,84 +60,84 @@ RSpec.describe AddressFinder::V1::Email::Verification do
     end
   end
 
-  describe '#build_request' do
+  describe "#build_request" do
     subject(:request_uri){ verification_module.send(:build_request) }
 
-    context 'with email argument' do
-      let(:args){ {email: 'john.doe@addressfinder.com', http: http} }
+    context "with email argument" do
+      let(:args){ {email: "john.doe@addressfinder.com", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=json") }
     end
 
-    context 'with email and format arguments' do
-      let(:args){ {email: 'john.doe@addressfinder.com', format: 'xml', http: http} }
+    context "with email and format arguments" do
+      let(:args){ {email: "john.doe@addressfinder.com", format: "xml", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=xml') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=xml") }
     end
 
-    context 'with a reserved character in the email' do
-      let(:args){ {email: 'john=doe@addressfinder.com', http: http} }
+    context "with a reserved character in the email" do
+      let(:args){ {email: "john=doe@addressfinder.com", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john%3Ddoe%40addressfinder.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john%3Ddoe%40addressfinder.com&key=XXX&secret=YYY&format=json") }
     end
 
-    context 'with a key override' do
-      let(:args){ {email: 'john.doe@addressfinder.com', key: 'AAA', http: http} }
+    context "with a key override" do
+      let(:args){ {email: "john.doe@addressfinder.com", key: "AAA", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=AAA&secret=YYY&format=json') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&key=AAA&secret=YYY&format=json") }
     end
 
-    context 'with a secret override' do
-      let(:args){ {email: 'john.doe@addressfinder.com', secret: 'BBB', http: http} }
+    context "with a secret override" do
+      let(:args){ {email: "john.doe@addressfinder.com", secret: "BBB", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=BBB&format=json') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=BBB&format=json") }
     end
 
-    context 'with a domain given' do
-      let(:args){ {email: 'john.doe@addressfinder.com', domain: 'testdomain.com', http: http} }
+    context "with a domain given" do
+      let(:args){ {email: "john.doe@addressfinder.com", domain: "testdomain.com", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=testdomain.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=testdomain.com&key=XXX&secret=YYY&format=json") }
 
-      context 'given in the AF configuration' do
-        let(:args){ {email: 'john.doe@addressfinder.com', http: http} }
+      context "given in the AF configuration" do
+        let(:args){ {email: "john.doe@addressfinder.com", http: http} }
 
-        it 'should use the config domain if set' do
-          AddressFinder.configuration.domain = 'anotherdomain.com'
-          expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=anotherdomain.com&key=XXX&secret=YYY&format=json')
+        it "should use the config domain if set" do
+          AddressFinder.configuration.domain = "anotherdomain.com"
+          expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=anotherdomain.com&key=XXX&secret=YYY&format=json")
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end
     end
 
-    context 'with a all arguments included in request' do
-      let(:args){ {email: 'john.doe@addressfinder.com', domain: 'mysite.com', format: 'json', http: http} }
+    context "with a all arguments included in request" do
+      let(:args){ {email: "john.doe@addressfinder.com", domain: "mysite.com", format: "json", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=mysite.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=mysite.com&key=XXX&secret=YYY&format=json") }
     end
   end
 
-  describe '#build_result' do
-    let(:args){ {email: 'ignored', http: nil} }
+  describe "#build_result" do
+    let(:args){ {email: "ignored", http: nil} }
 
     before do
-      verification_module.send('response_body=', body)
-      verification_module.send('response_status=', status)
+      verification_module.send("response_body=", body)
+      verification_module.send("response_status=", status)
     end
 
     subject(:result){ verification_module.send(:build_result) }
 
-    context 'with a successful verification' do
+    context "with a successful verification" do
       let(:body){ '{"email_account": "john.doe", "email_domain": "addressfinder.com", "is_verified": true, "success": true}' }
-      let(:status){ '200' }
+      let(:status){ "200" }
 
       it { expect(result.class).to eq(AddressFinder::V1::Email::Verification::Result) }
       it { expect(result.is_verified).to eq(true) }
       it { expect(result.email_account).to eq("john.doe") }
     end
 
-    context 'with an unsuccessful verification' do
+    context "with an unsuccessful verification" do
       let(:body){ '{"email_account": "jane.doe", "email_domain": "addressfinder.com", "is_verified": false, "not_verified_reason": "The email account does not exist", "success": true}' }
-      let(:status){ '200' }
+      let(:status){ "200" }
 
       it { expect(result.class).to eq(AddressFinder::V1::Email::Verification::Result) }
       it { expect(result.is_verified).to eq(false) }
