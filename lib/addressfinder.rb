@@ -9,7 +9,8 @@ require 'addressfinder/address_info'
 require 'addressfinder/address_search'
 require 'addressfinder/address_autocomplete'
 require 'addressfinder/bulk'
-require 'addressfinder/email/verification'
+require 'addressfinder/v1/email/verification'
+require 'addressfinder/v1/phone/verification'
 require 'addressfinder/errors'
 require 'addressfinder/util'
 require 'addressfinder/http'
@@ -63,7 +64,11 @@ module AddressFinder
     end
 
     def email_verification(args={})
-      AddressFinder::Email::Verification.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.result
+      AddressFinder::V1::Email::Verification.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.result
+    end
+
+    def phone_verification(args={})
+      AddressFinder::V1::Phone::Verification.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.result
     end
 
     def bulk(&block)

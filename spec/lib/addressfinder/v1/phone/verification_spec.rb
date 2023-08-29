@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe AddressFinder::Email::Verification do
+RSpec.describe AddressFinder::V1::Phone::Verification do
   before do
     AddressFinder.configure do |af|
       af.api_key = 'XXX'
@@ -10,12 +10,12 @@ RSpec.describe AddressFinder::Email::Verification do
     end
   end
 
-  let(:verification_module){ AddressFinder::Email::Verification.new(**args) }
+  let(:verification_module){ AddressFinder::V1::Phone::Verification.new(**args) }
   let(:http){ AddressFinder::HTTP.new(AddressFinder.configuration) }
   let(:net_http){ http.send(:net_http) }
 
   describe '#execute_request' do
-    let(:args){ {email: "john.doe@addressfinder.com", http: http} }
+    let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", http: http} }
 
     before do
       WebMock.allow_net_connect!(net_http_connect_on_start: true)
@@ -63,61 +63,55 @@ RSpec.describe AddressFinder::Email::Verification do
   describe '#build_request' do
     subject(:request_uri){ verification_module.send(:build_request) }
 
-    context 'with email argument' do
-      let(:args){ {email: 'john.doe@addressfinder.com', http: http} }
+    context 'with phone number and default country code arguments' do
+      let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&key=XXX&secret=YYY&format=json') }
     end
 
-    context 'with email and format arguments' do
-      let(:args){ {email: 'john.doe@addressfinder.com', format: 'xml', http: http} }
+    context 'with a reserved character in the phone number' do
+      let(:args){ {phone_number: "1800= 152 363", default_country_code: "AU", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=xml') }
-    end
-
-    context 'with a reserved character in the email' do
-      let(:args){ {email: 'john=doe@addressfinder.com', http: http} }
-
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john%3Ddoe%40addressfinder.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800%3D+152+363&default_country_code=AU&key=XXX&secret=YYY&format=json') }
     end
 
     context 'with a key override' do
-      let(:args){ {email: 'john.doe@addressfinder.com', key: 'AAA', http: http} }
+      let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", key: "AAA", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=AAA&secret=YYY&format=json') }
+      it { expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&key=AAA&secret=YYY&format=json') }
     end
 
     context 'with a secret override' do
-      let(:args){ {email: 'john.doe@addressfinder.com', secret: 'BBB', http: http} }
+      let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", secret: "BBB", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=BBB&format=json') }
+      it { expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&key=XXX&secret=BBB&format=json') }
     end
 
     context 'with a domain given' do
-      let(:args){ {email: 'john.doe@addressfinder.com', domain: 'testdomain.com', http: http} }
+      let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", domain: "testdomain.com", http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=testdomain.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&domain=testdomain.com&key=XXX&secret=YYY&format=json') }
 
       context 'given in the AF configuration' do
-        let(:args){ {email: 'john.doe@addressfinder.com', http: http} }
+        let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", http: http} }
 
         it 'should use the config domain if set' do
           AddressFinder.configuration.domain = 'anotherdomain.com'
-          expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=anotherdomain.com&key=XXX&secret=YYY&format=json')
+          expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&domain=anotherdomain.com&key=XXX&secret=YYY&format=json')
           AddressFinder.configuration.domain = nil # set back to nil after
         end
       end
     end
 
     context 'with a all arguments included in request' do
-      let(:args){ {email: 'john.doe@addressfinder.com', domain: 'mysite.com', format: 'json', http: http} }
+      let(:args){ {phone_number: "1800 152 363", default_country_code: "NZ", allowed_country_codes: "AU,NZ", mobile_only: true, timeout: "10", domain: 'mysite.com', format: 'xml', http: http} }
 
-      it { expect(request_uri).to eq('/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=mysite.com&key=XXX&secret=YYY&format=json') }
+      it { expect(request_uri).to eq('/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=NZ&allowed_country_codes=AU%2CNZ&mobile_only=true&timeout=10&domain=mysite.com&key=XXX&secret=YYY&format=xml') }
     end
   end
 
   describe '#build_result' do
-    let(:args){ {email: 'ignored', http: nil} }
+    let(:args){ {phone_number: 'ignored', default_country_code: 'ignored', http: nil} }
 
     before do
       verification_module.send('response_body=', body)
@@ -127,22 +121,24 @@ RSpec.describe AddressFinder::Email::Verification do
     subject(:result){ verification_module.send(:build_result) }
 
     context 'with a successful verification' do
-      let(:body){ '{"email_account": "john.doe", "email_domain": "addressfinder.com", "is_verified": true, "success": true}' }
+      let(:body){ '{"raw_international": "+611800152353", "line_type": "toll_free", "line_status": "disconnected", "is_verified": true, "success": true}' }
       let(:status){ '200' }
 
-      it { expect(result.class).to eq(AddressFinder::Email::Verification::Result) }
+      it { expect(result.class).to eq(AddressFinder::V1::Phone::Verification::Result) }
       it { expect(result.is_verified).to eq(true) }
-      it { expect(result.email_account).to eq("john.doe") }
+      it { expect(result.raw_international).to eq("+611800152353") }
+      it { expect(result.line_type).to eq("toll_free") }
+      it { expect(result.line_status).to eq("disconnected") }
     end
 
     context 'with an unsuccessful verification' do
-      let(:body){ '{"email_account": "jane.doe", "email_domain": "addressfinder.com", "is_verified": false, "not_verified_reason": "The email account does not exist", "success": true}' }
+      let(:body){ '{"is_verified": false, "not_verified_reason": "Phone number format is incorrect", "not_verified_code": "INVALID_FORMAT", "success": true}' }
       let(:status){ '200' }
 
-      it { expect(result.class).to eq(AddressFinder::Email::Verification::Result) }
+      it { expect(result.class).to eq(AddressFinder::V1::Phone::Verification::Result) }
       it { expect(result.is_verified).to eq(false) }
-      it { expect(result.email_account).to eq("jane.doe") }
-      it { expect(result.not_verified_reason).to eq("The email account does not exist") }
+      it { expect(result.not_verified_code).to eq("INVALID_FORMAT") }
+      it { expect(result.not_verified_reason).to eq("Phone number format is incorrect") }
     end
   end
 end

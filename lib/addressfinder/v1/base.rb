@@ -1,22 +1,16 @@
 require 'ostruct'
 
 module AddressFinder
-  module Email
-    class Verification
-  
+  module V1
+    class Base
       attr_reader :result
-  
-      def initialize(email:, http:, domain: nil, format: nil, key: nil, secret: nil)
-        @params = {}
-        @params[:email] = email
-        @params[:domain] = domain || config.domain if (domain || config.domain)
-        @params[:key] = key || config.api_key
-        @params[:secret] = secret || config.api_secret
-        @params[:format] = format || 'json'
 
+      def initialize(params:, path:, http:)
+        @params = params
+        @path = path
         @http = http
       end
-  
+
       def perform
         build_request
         execute_request
@@ -24,15 +18,15 @@ module AddressFinder
   
         self
       end
-  
+
       private
   
-      attr_reader :request_uri, :params, :http
+      attr_reader :request_uri, :params, :http, :path
       attr_accessor :response_body, :response_status
       attr_writer :result
-  
+
       def build_request
-        @request_uri = "/api/email/v1/verification?#{encoded_params}"
+        @request_uri = "#{path}?#{encoded_params}"
       end
   
       def encoded_params
