@@ -161,7 +161,7 @@ end
 ```ruby
 begin
   result = AddressFinder.email_verification(email: 'john.doe')
-  $stdout.puts "Is this email address verified? #{result.is_verified}"
+  $stdout.puts "This email address is verified: #{result.is_verified}"
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
   $stdout.puts response['message']
@@ -172,7 +172,7 @@ end
 ```ruby
 begin
   result = AddressFinder.phone_verification(phone_number: '1800 152 363', default_country_code: 'AU')
-  $stdout.puts "Is this phone number verified? #{result.is_verified}"
+  $stdout.puts "This phone number is verified: #{result.is_verified}"
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
   $stdout.puts response['message']
