@@ -157,6 +157,28 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
+#### Email Verification
+```ruby
+begin
+  result = AddressFinder.email_verification(email: 'john.doe')
+  $stdout.puts "Is this email address verified? #{result.is_verified}"
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
+
+#### Phone Verification
+```ruby
+begin
+  result = AddressFinder.phone_verification(phone_number: '1800 152 363', default_country_code: 'AU')
+  $stdout.puts "Is this phone number verified? #{result.is_verified}"
+rescue AddressFinder::RequestRejectedError => e
+  response = JSON.parse(e.body)
+  $stdout.puts response['message']
+end
+```
+
 ## Advanced Usage
 
 #### Bulk Operations
@@ -164,7 +186,7 @@ end
 If you have a series of API requests, you can use the
 bulk method to re-use the HTTP connection.
 
-**Note:** The bulk method is currently only available for Address Verification (`#verification`).
+**Note:** The bulk method is currently only available for Address Verification, Email Verification and Phone Verification (`#verification`, `#email_verification`, `#phone_verifiction`).
 
 ```ruby
 AddressFinder.bulk do |af|
