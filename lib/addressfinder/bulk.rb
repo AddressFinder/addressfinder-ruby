@@ -36,6 +36,14 @@ module AddressFinder
         end
       end
 
+      def email_verification(args={})
+        AddressFinder::V1::Email::Verification.new(**args.merge(http: http)).perform.result
+      end
+
+      def phone_verification(args={})
+        AddressFinder::V1::Phone::Verification.new(**args.merge(http: http)).perform.result
+      end
+
       private
 
       attr_reader :http, :verification_version, :default_country
