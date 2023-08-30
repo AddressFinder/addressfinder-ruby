@@ -72,7 +72,7 @@ RSpec.describe AddressFinder::V1::Email::Verification do
     context "with email and format arguments" do
       let(:args){ {email: "john.doe@addressfinder.com", format: "xml", http: http} }
 
-      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=YYY&format=xml") }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&format=xml&key=XXX&secret=YYY") }
     end
 
     context "with a reserved character in the email" do
@@ -90,7 +90,7 @@ RSpec.describe AddressFinder::V1::Email::Verification do
     context "with a secret override" do
       let(:args){ {email: "john.doe@addressfinder.com", secret: "BBB", http: http} }
 
-      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&key=XXX&secret=BBB&format=json") }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&secret=BBB&key=XXX&format=json") }
     end
 
     context "with a domain given" do
@@ -110,9 +110,9 @@ RSpec.describe AddressFinder::V1::Email::Verification do
     end
 
     context "with a all arguments included in request" do
-      let(:args){ {email: "john.doe@addressfinder.com", domain: "mysite.com", format: "json", http: http} }
+      let(:args){ {email: "john.doe@addressfinder.com", domain: "mysite.com", key: "AAA", secret: "BBB", format: "json", http: http} }
 
-      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=mysite.com&key=XXX&secret=YYY&format=json") }
+      it { expect(request_uri).to eq("/api/email/v1/verification?email=john.doe%40addressfinder.com&domain=mysite.com&key=AAA&secret=BBB&format=json") }
     end
   end
 

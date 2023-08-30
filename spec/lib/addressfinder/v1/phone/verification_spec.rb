@@ -84,7 +84,7 @@ RSpec.describe AddressFinder::V1::Phone::Verification do
     context "with a secret override" do
       let(:args){ {phone_number: "1800 152 363", default_country_code: "AU", secret: "BBB", http: http} }
 
-      it { expect(request_uri).to eq("/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&key=XXX&secret=BBB&format=json") }
+      it { expect(request_uri).to eq("/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=AU&secret=BBB&key=XXX&format=json") }
     end
 
     context "with a domain given" do
@@ -104,9 +104,9 @@ RSpec.describe AddressFinder::V1::Phone::Verification do
     end
 
     context "with a all arguments included in request" do
-      let(:args){ {phone_number: "1800 152 363", default_country_code: "NZ", allowed_country_codes: "AU,NZ", mobile_only: true, timeout: "10", domain: "mysite.com", format: "xml", http: http} }
+      let(:args){ {phone_number: "1800 152 363", default_country_code: "NZ", allowed_country_codes: "AU,NZ", mobile_only: true, timeout: "10", domain: "mysite.com", key: "AAA", secret: "BBB", format: "xml", http: http} }
 
-      it { expect(request_uri).to eq("/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=NZ&allowed_country_codes=AU%2CNZ&mobile_only=true&timeout=10&domain=mysite.com&key=XXX&secret=YYY&format=xml") }
+      it { expect(request_uri).to eq("/api/phone/v1/verification?phone_number=1800+152+363&default_country_code=NZ&allowed_country_codes=AU%2CNZ&mobile_only=true&timeout=10&domain=mysite.com&key=AAA&secret=BBB&format=xml") }
     end
   end
 

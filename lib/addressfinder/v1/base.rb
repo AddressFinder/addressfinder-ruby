@@ -7,6 +7,11 @@ module AddressFinder
 
       def initialize(params:, path:, http:)
         @params = params
+        @params[:domain] ||= config.domain if (config.domain)
+        @params[:key] ||= config.api_key
+        @params[:secret] ||= config.api_secret
+        @params[:format] ||= 'json'
+
         @path = path
         @http = http
       end

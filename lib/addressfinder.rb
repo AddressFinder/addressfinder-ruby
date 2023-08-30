@@ -64,11 +64,11 @@ module AddressFinder
     end
 
     def email_verification(args={})
-      AddressFinder::V1::Email::Verification.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.result
+      AddressFinder::V1::Email::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
     end
 
     def phone_verification(args={})
-      AddressFinder::V1::Phone::Verification.new(params: args, http: AddressFinder::HTTP.new(configuration)).perform.result
+      AddressFinder::V1::Phone::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
     end
 
     def bulk(&block)
