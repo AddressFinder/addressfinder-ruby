@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.summary       = 'Provides easy access to AddressFinder APIs'
   gem.homepage      = 'https://github.com/AddressFinder/addressfinder-ruby'
 
-  gem.files         = `git ls-files`.split($/).select{|f| f.match(%r{^lib|.gemspec|.md})}
+  gem.files         = `git ls-files`.split($/).select{|f| f.match(%r{^lib|\.gemspec$|\.md$})}
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(spec|features)/})
   gem.require_paths = ['lib']
