@@ -75,7 +75,7 @@ module AddressFinder
     end
 
     def emails_verification(args = {})
-      AddressFinder::V1::Email::BulkVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+      AddressFinder::V1::Email::BulkVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
     end
 
     def phone_verification(args = {})

@@ -4,12 +4,18 @@ module AddressFinder
       class BulkVerification
         attr_reader :emails, :http, :args, :results
 
-        def initialize(emails:, http:, **args)
+        # Verifies an array of email addresses using concurrency to reduce the execution time.
+        # The results of the verification are stored in the `results` attribute, in the same order
+        # in which they were supplied.
+        #
+        # @param [Array<String>] emails
+        # @param [AddressFinder::V1::Http] http
+        # @param [Hash] args
+        def initialize(emails:, **args)
           @emails = emails
-          @http = http
           @args = args
 
-          @block_size = 10
+          @block_size = 1
           @concurrency_level = 5
         end
 
@@ -23,18 +29,19 @@ module AddressFinder
 
         private
 
+        # Slices the supplied emails into blocks of size `@block_size`
         def slice_supplied_emails_into_blocks
           @email_blocks = emails.each_slice(@block_size).to_a
-          @email_block_results = Array.new(@email_blocks.size)
+
+          # Holds the results from each of the threads that process a block of emails.
+          # There are a matching number of 'slots' for each email block
+          @verification_results = Array.new(@email_blocks.size)
         end
 
         def verify_each_block_concurrently
-          # Create a thread pool
           thread_pool = []
 
-          @email_blocks.each do |block_emails, index_of_block|
-            puts "Block emails: #{block_emails.inspect}"
-
+          @email_blocks.each_with_index do |block_emails, index_of_block|
             # Start a new thread for each task
             thread_pool << Thread.new { verify_block(block_emails, index_of_block) }
 
@@ -49,22 +56,22 @@ module AddressFinder
           thread_pool.each(&:join)
         end
 
+        # Verifies a block of email addresses, and writes the results into @verification_results
         def verify_block(block_emails, index_of_block)
-          block_emails.each do |email|
-            puts "verifying email: #{email}"
-            sleep(1)
+          AddressFinder.bulk do |af|
+            block_results = []
+
+            block_emails.each do |email|
+              block_results << af.email_verification(email: email)
+              $stderr.putc "."
+            end
+
+            @verification_results[index_of_block] = block_results
           end
-
-          @email_block_results[index_of_block] = []
-        end
-
-        def verify_email(email, http, args)
-          puts "Verifying: #{email}"
-          sleep(1)
         end
 
         def assemble_results
-          @results = @email_block_results.flatten
+          @results = @verification_results.flatten
         end
       end
     end

@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.version       = AddressFinder::VERSION
   gem.licenses      = ['MIT']
   gem.authors       = ['Nigel Ramsay', 'Naiki Pohe', 'Sean Arnold', 'Alexandre Barret', 'Cassandre Guinut']
-  gem.email         = ['nigel.ramsay@addressfinder.nz', 'naiki.pohe@abletech.co.nz', 'seanarnie@gmail.com', 'alex@abletech.nz', 'cassandre.guinut@addressfinder.nz']
+  gem.email         = ['nigel.ramsay@addressfinder.com', 'naiki.pohe@abletech.co.nz', 'seanarnie@gmail.com', 'alex@abletech.nz', 'cassandre.guinut@addressfinder.com']
   gem.description   = 'Ruby client library for AddressFinder'
   gem.summary       = 'Provides easy access to AddressFinder APIs'
   gem.homepage      = 'https://github.com/AddressFinder/addressfinder-ruby'
@@ -24,4 +24,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'rspec', '~> 3.11'
   gem.add_development_dependency 'webmock', '~> 1.21'
+  gem.add_development_dependency 'debug', '>= 1.0.0'
 end
