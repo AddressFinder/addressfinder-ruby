@@ -1,7 +1,7 @@
 module AddressFinder
   module V1
     module Email
-      class BulkVerification
+      class BatchVerification
         attr_reader :emails, :http, :args, :results
 
         # Verifies an array of email addresses using concurrency to reduce the execution time.
@@ -15,8 +15,18 @@ module AddressFinder
           @emails = emails
           @args = args
 
+          # We get the benefits of re-using the same HTTP connection when we verify in a
+          # block. This is provided by the called to AddressFinder.bulk()
           @block_size = 1
-          @concurrency_level = 5
+
+          if args[:concurrency]
+            if args[:concurrency].to_i > 10
+              warn "WARNING: Concurrency level of #{args[:concurrency]} is higher than the maximum of 10. Using 10."
+              @concurrency_level = 10
+            else
+              @concurrency_level = args[:concurrency].to_i
+            end
+          end
         end
 
         def perform
@@ -63,7 +73,11 @@ module AddressFinder
 
             block_emails.each do |email|
               block_results << af.email_verification(email: email)
+
               $stderr.putc "."
+            rescue AddressFinder::RequestRejectedError => e
+              block_results << OpenStruct.new(success: false, body: e.body, status: e.status)
+              $stderr.putc "x"
             end
 
             @verification_results[index_of_block] = block_results
