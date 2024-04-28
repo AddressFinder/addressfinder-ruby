@@ -15,10 +15,6 @@ module AddressFinder
           @emails = emails
           @args = args
 
-          # We get the benefits of re-using the same HTTP connection when we verify in a
-          # block. This is provided by the called to AddressFinder.bulk()
-          @block_size = 1
-
           if args[:concurrency]
             if args[:concurrency].to_i > 10
               warn "WARNING: Concurrency level of #{args[:concurrency]} is higher than the maximum of 10. Using 10."
@@ -30,30 +26,20 @@ module AddressFinder
         end
 
         def perform
-          slice_supplied_emails_into_blocks
-          verify_each_block_concurrently
-          assemble_results
+          verify_each_email_concurrently
 
           self
         end
 
         private
 
-        # Slices the supplied emails into blocks of size `@block_size`
-        def slice_supplied_emails_into_blocks
-          @email_blocks = emails.each_slice(@block_size).to_a
-
-          # Holds the results from each of the threads that process a block of emails.
-          # There are a matching number of 'slots' for each email block
-          @verification_results = Array.new(@email_blocks.size)
-        end
-
-        def verify_each_block_concurrently
+        def verify_each_email_concurrently
           thread_pool = []
+          @results = Array.new(emails.length)
 
-          @email_blocks.each_with_index do |block_emails, index_of_block|
+          @emails.each_with_index do |email, index_of_email|
             # Start a new thread for each task
-            thread_pool << Thread.new { verify_block(block_emails, index_of_block) }
+            thread_pool << Thread.new { verify_email(email, index_of_email) }
 
             # If we've reached max threads, wait for one to finish before starting another
             if thread_pool.size >= @concurrency_level
@@ -67,25 +53,13 @@ module AddressFinder
         end
 
         # Verifies a block of email addresses, and writes the results into @verification_results
-        def verify_block(block_emails, index_of_block)
-          AddressFinder.bulk do |af|
-            block_results = []
+        def verify_email(email, index_of_email)
+          @results[index_of_email] = AddressFinder.email_verification(email: email)
 
-            block_emails.each do |email|
-              block_results << af.email_verification(email: email)
-
-              $stderr.putc "."
-            rescue AddressFinder::RequestRejectedError => e
-              block_results << OpenStruct.new(success: false, body: e.body, status: e.status)
-              $stderr.putc "x"
-            end
-
-            @verification_results[index_of_block] = block_results
-          end
-        end
-
-        def assemble_results
-          @results = @verification_results.flatten
+          $stderr.putc "."
+        rescue AddressFinder::RequestRejectedError => e
+          @results[index_of_email] = OpenStruct.new(success: false, body: e.body, status: e.status)
+          $stderr.putc "x"
         end
       end
     end
