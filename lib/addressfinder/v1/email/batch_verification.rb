@@ -2,30 +2,22 @@ module AddressFinder
   module V1
     module Email
       class BatchVerification
-        attr_reader :emails, :http, :args, :results
+        attr_reader :emails, :results
 
         # Verifies an array of email addresses using concurrency to reduce the execution time.
         # The results of the verification are stored in the `results` attribute, in the same order
         # in which they were supplied.
         #
         # @param [Array<String>] emails
-        # @param [AddressFinder::V1::Http] http
         # @param [Hash] args
-        def initialize(emails:, **args)
+        def initialize(emails:, concurrency: 1, **args)
           @emails = emails
+          @concurrency = concurrency&.to_i || 1
           @args = args
-
-          if args[:concurrency]
-            if args[:concurrency].to_i > 10
-              warn "WARNING: Concurrency level of #{args[:concurrency]} is higher than the maximum of 10. Using 10."
-              @concurrency_level = 10
-            else
-              @concurrency_level = args[:concurrency].to_i
-            end
-          end
         end
 
         def perform
+          confirm_concurrency_level
           verify_each_email_concurrently
 
           self
@@ -33,28 +25,37 @@ module AddressFinder
 
         private
 
+        attr_reader :args, :concurrency
+
+        MAX_CONCURRENCY_LEVEL = 20
+
+        def confirm_concurrency_level
+          if @concurrency > MAX_CONCURRENCY_LEVEL
+            warn "WARNING: Concurrency level of #{@concurrency} is higher than the maximum of #{MAX_CONCURRENCY_LEVEL}. Using #{MAX_CONCURRENCY_LEVEL}."
+            @concurrency = MAX_CONCURRENCY_LEVEL
+          end
+        end
+
         def verify_each_email_concurrently
-          thread_pool = []
-          @results = Array.new(emails.length)
+          @results = Concurrent::Array.new(emails.length)
+
+          pool = Concurrent::FixedThreadPool.new(concurrency)
 
           @emails.each_with_index do |email, index_of_email|
             # Start a new thread for each task
-            thread_pool << Thread.new { verify_email(email, index_of_email) }
-
-            # If we've reached max threads, wait for one to finish before starting another
-            if thread_pool.size >= @concurrency_level
-              thread = thread_pool.shift
-              thread.join
+            pool.post do
+              verify_email(email, index_of_email)
             end
           end
 
-          # Wait for all threads to complete
-          thread_pool.each(&:join)
+          ## Shutdown the pool and wait for all tasks to complete
+          pool.shutdown
+          pool.wait_for_termination
         end
 
         # Verifies a block of email addresses, and writes the results into @verification_results
         def verify_email(email, index_of_email)
-          @results[index_of_email] = AddressFinder.email_verification(email: email)
+          @results[index_of_email] = AddressFinder.email_verification(email: email, **args)
 
           $stderr.putc "."
         rescue AddressFinder::RequestRejectedError => e
