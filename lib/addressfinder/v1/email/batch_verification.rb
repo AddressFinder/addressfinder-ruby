@@ -10,7 +10,7 @@ module AddressFinder
         #
         # @param [Array<String>] emails
         # @param [Hash] args
-        def initialize(emails:, concurrency: 5, http:, **args)
+        def initialize(emails:, http:, concurrency: 5, **args)
           @emails = emails
           @concurrency = concurrency
           @http = http
