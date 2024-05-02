@@ -10,9 +10,10 @@ module AddressFinder
         #
         # @param [Array<String>] emails
         # @param [Hash] args
-        def initialize(emails:, concurrency: 1, **args)
+        def initialize(emails:, concurrency: 5, http:, **args)
           @emails = emails
-          @concurrency = concurrency&.to_i || 1
+          @concurrency = concurrency
+          @http = http
           @args = args
         end
 
@@ -25,7 +26,7 @@ module AddressFinder
 
         private
 
-        attr_reader :args, :concurrency
+        attr_reader :args, :concurrency, :http
 
         MAX_CONCURRENCY_LEVEL = 20
 
@@ -55,12 +56,9 @@ module AddressFinder
 
         # Verifies a block of email addresses, and writes the results into @verification_results
         def verify_email(email, index_of_email)
-          @results[index_of_email] = AddressFinder.email_verification(email: email, **args)
-
-          $stderr.putc "."
+          @results[index_of_email] = AddressFinder::V1::Email::Verification.new(email: email, http: http.clone, **args).perform.result
         rescue AddressFinder::RequestRejectedError => e
           @results[index_of_email] = OpenStruct.new(success: false, body: e.body, status: e.status)
-          $stderr.putc "x"
         end
       end
     end
