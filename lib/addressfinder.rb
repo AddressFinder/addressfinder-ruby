@@ -21,14 +21,12 @@ require "addressfinder/http"
 module AddressFinder
   class << self
     def configure(config_hash = nil)
-      if config_hash
-        config_hash.each do |k, v|
-          if configuration.respond_to?(:"#{k}=")
-            begin
-              configuration.send(:"#{k}=", v)
-            rescue
-              nil
-            end
+      config_hash&.each do |k, v|
+        if configuration.respond_to?(:"#{k}=")
+          begin
+            configuration.send(:"#{k}=", v)
+          rescue
+            nil
           end
         end
       end
