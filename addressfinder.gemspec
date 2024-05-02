@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.required_ruby_version = '>= 2.6'
+  gem.required_ruby_version = '>= 2.7'
   gem.add_dependency 'multi_json', '~> 1.15'
   gem.add_dependency "concurrent-ruby", "~> 1.2"
 

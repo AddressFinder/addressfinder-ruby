@@ -6,7 +6,7 @@ FROM ruby:2.7
 # - nodejs: Compile assets
 # - bundler: ensure most recent version is installed
 RUN apt-get update && apt-get install -qq -y build-essential --fix-missing --no-install-recommends
-RUN gem install bundler
+RUN gem install bundler -v 2.4.22
 
 # Set an environment variable to store where the app is installed to inside
 # of the Docker image.
