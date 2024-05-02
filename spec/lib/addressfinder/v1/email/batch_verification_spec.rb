@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe AddressFinder::V1::Email::BatchVerification, focus: true do
+RSpec.describe AddressFinder::V1::Email::BatchVerification do
   let(:http){
     AddressFinder::HTTP.new(AddressFinder.configuration) 
   }
@@ -19,7 +19,7 @@ RSpec.describe AddressFinder::V1::Email::BatchVerification, focus: true do
       params = CGI.parse(uri.query)
       email = params["email"].first
 
-      # returns a JSON string with the requested email address included
+      # returns a JSON string with the requested email address embedded
       {
         body: verified_response(email), status: 200
       } 
@@ -28,7 +28,7 @@ RSpec.describe AddressFinder::V1::Email::BatchVerification, focus: true do
 
   describe "when operating concurrently" do 
     subject(:results) do 
-      AddressFinder::V1::Email::BatchVerification.new(emails: ["bert@myemail.com", "charlish@myemail.com", "bademailaddress"], http: http).perform.results
+      AddressFinder::V1::Email::BatchVerification.new(emails: ["bert@myemail.com", "charlish@myemail.com", "bademailaddress"], concurrency: 3, http: http).perform.results
     end
 
     it "has 3 results" do 
@@ -47,7 +47,7 @@ RSpec.describe AddressFinder::V1::Email::BatchVerification, focus: true do
   describe "with an excessive concurrency level" do 
     it "writes a warning message" do 
       verifier = AddressFinder::V1::Email::BatchVerification.new(emails: ["bert@myemail.com", "charlish@myemail.com", "bademailaddress"], concurrency: 100, http: http)
-      expect(verifier).to receive(:warn).with("WARNING: Concurrency level of 100 is higher than the maximum of 20. Using 20.")
+      expect(verifier).to receive(:warn).with("WARNING: Concurrency level of 100 is higher than the maximum of 10. Using 10.")
       verifier.perform
     end
   end

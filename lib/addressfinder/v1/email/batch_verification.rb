@@ -28,7 +28,7 @@ module AddressFinder
 
         attr_reader :args, :concurrency, :http
 
-        MAX_CONCURRENCY_LEVEL = 20
+        MAX_CONCURRENCY_LEVEL = 10
 
         def confirm_concurrency_level
           if @concurrency > MAX_CONCURRENCY_LEVEL
