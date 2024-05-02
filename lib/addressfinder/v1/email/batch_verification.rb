@@ -9,7 +9,9 @@ module AddressFinder
         # in which they were supplied.
         #
         # @param [Array<String>] emails
-        # @param [Hash] args
+        # @param [AddressFinder::HTTP] http HTTP connection helper
+        # @param [Integer] concurrency How many threads to use for verification
+        # @param [Hash] args Any additional arguments that will be passed onto the EV API
         def initialize(emails:, http:, concurrency: 5, **args)
           @emails = emails
           @concurrency = concurrency
@@ -31,10 +33,10 @@ module AddressFinder
         MAX_CONCURRENCY_LEVEL = 10
 
         def confirm_concurrency_level
-          if @concurrency > MAX_CONCURRENCY_LEVEL
-            warn "WARNING: Concurrency level of #{@concurrency} is higher than the maximum of #{MAX_CONCURRENCY_LEVEL}. Using #{MAX_CONCURRENCY_LEVEL}."
-            @concurrency = MAX_CONCURRENCY_LEVEL
-          end
+          return unless @concurrency > MAX_CONCURRENCY_LEVEL
+
+          warn "WARNING: Concurrency level of #{@concurrency} is higher than the maximum of #{MAX_CONCURRENCY_LEVEL}. Using #{MAX_CONCURRENCY_LEVEL}."
+          @concurrency = MAX_CONCURRENCY_LEVEL
         end
 
         def verify_each_email_concurrently
@@ -56,7 +58,8 @@ module AddressFinder
 
         # Verifies a block of email addresses, and writes the results into @verification_results
         def verify_email(email, index_of_email)
-          @results[index_of_email] = AddressFinder::V1::Email::Verification.new(email: email, http: http.clone, **args).perform.result
+          @results[index_of_email] =
+            AddressFinder::V1::Email::Verification.new(email: email, http: http.clone, **args).perform.result
         rescue AddressFinder::RequestRejectedError => e
           @results[index_of_email] = OpenStruct.new(success: false, body: e.body, status: e.status)
         end
