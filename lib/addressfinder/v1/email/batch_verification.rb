@@ -56,7 +56,7 @@ module AddressFinder
           pool.wait_for_termination
         end
 
-        # Verifies a block of email addresses, and writes the results into @verification_results
+        # Verifies a single email addresses, and writes the result into @results
         def verify_email(email, index_of_email)
           @results[index_of_email] =
             AddressFinder::V1::Email::Verification.new(email: email, http: http.clone, **args).perform.result

@@ -1,4 +1,5 @@
 require "spec_helper"
+require "cgi"
 
 RSpec.describe AddressFinder::V1::Email::BatchVerification do
   let(:http) {
