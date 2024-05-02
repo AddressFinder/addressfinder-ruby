@@ -82,8 +82,8 @@ module AddressFinder
       AddressFinder::V1::Phone::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
     end
 
-    def bulk(&)
-      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, default_country: configuration.default_country, &).perform
+    def bulk(&block)
+      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, default_country: configuration.default_country, &block).perform
     end
   end
 end
