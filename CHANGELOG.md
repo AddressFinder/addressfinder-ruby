@@ -1,3 +1,8 @@
+# AddressFinder 1.11.0 (May 2024) #
+
+* Add a batch capability with concurrency for Email Verification
+* Increase minimum version of Ruby to version 2.7
+
 # AddressFinder 1.10.0 (August 2023) #
 
 * Add support for Email Verification
