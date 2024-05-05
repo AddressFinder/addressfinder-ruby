@@ -7,8 +7,8 @@ Gem::Specification.new do |gem|
   gem.licenses      = ['MIT']
   gem.authors       = ['Nigel Ramsay', 'Naiki Pohe', 'Sean Arnold', 'Alexandre Barret', 'Cassandre Guinut']
   gem.email         = ['nigel.ramsay@addressfinder.com', 'naiki.pohe@abletech.co.nz', 'seanarnie@gmail.com', 'alex@abletech.nz', 'cassandre.guinut@addressfinder.com']
-  gem.description   = 'Ruby client library for AddressFinder'
-  gem.summary       = 'Provides easy access to AddressFinder APIs'
+  gem.description   = 'Ruby client library for Addressfinder'
+  gem.summary       = 'Provides easy access to Addressfinder APIs'
   gem.homepage      = 'https://github.com/AddressFinder/addressfinder-ruby'
 
   gem.files         = `git ls-files`.split($/).select{|f| f.match(%r{^lib|\.gemspec$|\.md$})}
