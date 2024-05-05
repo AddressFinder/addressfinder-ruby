@@ -158,9 +158,12 @@ end
 ```
 
 #### Email Verification
+
+This example shows how to request verification of a single email address. 
+
 ```ruby
 begin
-  result = AddressFinder.email_verification(email: 'john.doe')
+  result = AddressFinder.email_verification(email: 'john.doe', features: "domain,connection")
   $stdout.puts "This email address is verified: #{result.is_verified}"
 rescue AddressFinder::RequestRejectedError => e
   response = JSON.parse(e.body)
@@ -168,7 +171,28 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
+This example shows how to request verification of several email addresses:
+
+```ruby 
+emails = [
+  "bert@myemail.com", 
+  "charlish@myemail.com", 
+  "support@addressfinder.com", 
+  "bad-email-address"
+]
+
+results = AddressFinder.email_verification_batch(emails: emails, concurrency: 2, features: "provider,domain,connection")
+
+results.each_with_index do |result, index|
+  puts "Email: #{emails[index]} - #{result.is_verified ? "Verified" : "Unverified"}"
+end
+```
+
+The emails will be verified concurrently, and returned in the same order in 
+which they were provided.
+
 #### Phone Verification
+
 ```ruby
 begin
   result = AddressFinder.phone_verification(phone_number: '1800 152 363', default_country_code: 'AU')
