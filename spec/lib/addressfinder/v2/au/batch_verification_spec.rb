@@ -54,7 +54,7 @@ RSpec.describe AddressFinder::V2::Au::BatchVerification do
 
   describe "with an excessive concurrency level" do
     it "writes a warning message" do
-      verifier = AddressFinder::V2::Au::BatchVerification.new(addresses: ["bert@myemail.com", "charlish@myemail.com", "bademailaddress"], concurrency: 100, http: http)
+      verifier = AddressFinder::V2::Au::BatchVerification.new(addresses: ["address1", "address2"], concurrency: 100, http: http)
       expect(verifier).to receive(:warn).with("WARNING: Concurrency level of 100 is higher than the maximum of 5. Using 5.")
       verifier.perform
     end
