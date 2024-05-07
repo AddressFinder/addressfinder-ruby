@@ -1,8 +1,7 @@
-require 'ostruct'
+require "ostruct"
 
 module AddressFinder
   class Verification
-
     attr_reader :result
 
     # AU V1 expected attributes:
@@ -21,24 +20,25 @@ module AddressFinder
     # params[:domain] --> used for reporting does not affect query results
     # params[:key] --> unique AddressFinder public key
     # params[:secret] --> unique AddressFinder secret key
-    def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, state_codes: nil, delivered: nil, rural: nil, region_code: nil, country: nil, http:)
+    def initialize(q:, http:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, state_codes: nil,
+      delivered: nil, rural: nil, region_code: nil, country: nil)
       @params = {}
       # Common to AU and NZ
-      @params['q'] = q
-      @params['post_box'] = post_box if post_box
-      @params['census'] = census if census
-      @params['domain'] = domain || config.domain if (domain || config.domain)
-      @params['key'] = key || config.api_key
-      @params['secret'] = secret || config.api_secret
+      @params["q"] = q
+      @params["post_box"] = post_box if post_box
+      @params["census"] = census if census
+      @params["domain"] = domain || config.domain if domain || config.domain
+      @params["key"] = key || config.api_key
+      @params["secret"] = secret || config.api_secret
       # AU params
-      @params['state_codes'] = state_codes if state_codes
+      @params["state_codes"] = state_codes if state_codes
       # NZ params
-      @params['delivered'] = delivered if delivered
-      @params['rural'] = rural if rural
-      @params['region_code'] = region_code if region_code
+      @params["delivered"] = delivered if delivered
+      @params["rural"] = rural if rural
+      @params["region_code"] = region_code if region_code
       @country = country || config.default_country
 
-      @params['format'] = 'json'
+      @params["format"] = "json"
       @http = http
     end
 
@@ -70,14 +70,10 @@ module AddressFinder
     end
 
     def build_result
-      if response_status != '200'
-        raise AddressFinder::RequestRejectedError.new(@response_status, @response_body)
-      end
+      raise AddressFinder::RequestRejectedError.new(@response_status, @response_body) if response_status != "200"
 
-      if response_hash['matched']
-        self.result = Result.new(response_hash['address'] || response_hash)
-      else
-        self.result = nil
+      self.result = if response_hash["matched"]
+        Result.new(response_hash["address"] || response_hash)
       end
     end
 
