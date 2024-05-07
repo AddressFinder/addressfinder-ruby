@@ -8,10 +8,9 @@ module AddressFinder
     # in which they were supplied.
     #
     # @param [Array<String>] addresses array of address query strings
-    # @param [String] post_box
     # @param [AddressFinder::HTTP] http HTTP connection helper
     # @param [Integer] concurrency How many threads to use for verification
-    # @param [Hash] args Any additional arguments that will be passed onto the EV API
+    # @param [Hash] args Any additional arguments that will be passed onto the Address Verification API
     def initialize(addresses:, http: nil, concurrency: 2, **args)
       @addresses = addresses
       @concurrency = concurrency
