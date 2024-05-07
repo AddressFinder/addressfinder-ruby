@@ -56,8 +56,10 @@ For available parameters and example responses, see the API documentation pages 
 
 #### Address Verification
 
+To verify a single New Zealand address, use the following method:
+
 ```ruby
-result = AddressFinder.verification(q: '186 Willis St, Wellington', country: 'nz')
+result = AddressFinder.address_verification(q: '186 Willis St, Wellington', country: 'nz')
 
 if result
   $stdout.puts "Success: #{result.postal}"
@@ -66,7 +68,49 @@ else
 end
 ```
 
-**Note:** The deprecated method `cleanse` is still available now but will be dropped in the future.
+You can also verify a batch of New Zealand addresses using the following method. 
+We suggest that you send up to 100 addresses in each batch. 
+
+```ruby
+result = AddressFinder.address_verification_batch(addresses: [
+  "186 Willis St, Wellington", 
+  "1 Ghuznee St, Te Aro, Wellington 6011"
+], country: "nz", concurrency: 5)
+
+if result
+  $stdout.puts "Success: #{result.postal}"
+else
+  $stdout.puts "Sorry, can't find that address"
+end
+```
+
+To verify a single Australian address, use the following method:
+
+```ruby
+result = AddressFinder.address_verification(q: '10/274 Harbour Drive, Coffs Harbour NSW 2450', country: 'au')
+
+if result
+  $stdout.puts "Success: #{result.postal}"
+else
+  $stdout.puts "Sorry, can't find that address"
+end
+```
+
+You can also verify a batch of New Zealand addresses using the following method:
+We suggest that you send up to 100 addresses in each batch. 
+
+```ruby
+result = AddressFinder.address_verification_batch(addresses: [
+  "186 Willis St, Wellington",
+  "1 Ghuznee St, Te Aro, Wellington 6011"
+], country: 'nz', concurrency: 5)
+
+if result
+  $stdout.puts "Success: #{result.postal}"
+else
+  $stdout.puts "Sorry, can't find that address"
+end
+```
 
 #### Address Search
 
