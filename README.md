@@ -87,26 +87,26 @@ end
 To verify a single Australian address, use the following method:
 
 ```ruby
-result = AddressFinder.address_verification(q: '10/274 Harbour Drive, Coffs Harbour NSW 2450', country: 'au')
+result = AddressFinder.address_verification(q: '10/274 Harbour Drive, Coffs Harbour NSW 2450', gnaf: "1", country: 'au')
 
 if result
-  $stdout.puts "Success: #{result.postal}"
+  $stdout.puts "Success: #{result.full_address}"
 else
   $stdout.puts "Sorry, can't find that address"
 end
 ```
 
-You can also verify a batch of New Zealand addresses using the following method:
+You can also verify a batch of Australian addresses using the following method:
 We suggest that you send up to 100 addresses in each batch. 
 
 ```ruby
 result = AddressFinder.address_verification_batch(addresses: [
-  "186 Willis St, Wellington",
-  "1 Ghuznee St, Te Aro, Wellington 6011"
-], country: 'nz', concurrency: 5)
+  "10/274 Harbour Drive, Coffs Harbour NSW 2450",
+  "49 CORNISH ST, COBAR NSW 2835"
+], gnaf: "1", country: 'au', concurrency: 5)
 
 if result
-  $stdout.puts "Success: #{result.postal}"
+  $stdout.puts "Success: #{result.full_address}"
 else
   $stdout.puts "Sorry, can't find that address"
 end
