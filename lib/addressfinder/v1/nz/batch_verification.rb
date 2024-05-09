@@ -1,6 +1,6 @@
 module AddressFinder
-  module V2
-    module Au
+  module V1
+    module Nz
       class BatchVerification
         attr_reader :addresses, :results
 
@@ -60,7 +60,7 @@ module AddressFinder
         # Verifies a single address, and writes the result into @results
         def verify_address(address, index_of_address)
           @results[index_of_address] =
-            AddressFinder::V2::Au::Verification.new(q: address, http: http.clone, **args).perform.result
+            AddressFinder::Verification.new(q: address, http: http.clone, **args).perform.result
         rescue AddressFinder::RequestRejectedError => e
           @results[index_of_address] = OpenStruct.new(success: false, body: e.body, status: e.status)
         end

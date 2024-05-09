@@ -1,7 +1,7 @@
 require "spec_helper"
 require "cgi"
 
-RSpec.describe AddressFinder::BatchVerification do
+RSpec.describe AddressFinder::V1::Nz::BatchVerification do
   let(:http) {
     AddressFinder::HTTP.new(AddressFinder.configuration)
   }
@@ -30,7 +30,7 @@ RSpec.describe AddressFinder::BatchVerification do
 
   describe "when operating concurrently" do
     subject(:results) do
-      AddressFinder::BatchVerification.new(addresses: [
+      AddressFinder::V1::Nz::BatchVerification.new(addresses: [
         "1 ghuznee st te aro wellington 6011",
         "95 Opiki Road, Opiki 4474",
         "Level 2, 4 Bond Street, Te Aro, Wellington 6011"
@@ -56,7 +56,7 @@ RSpec.describe AddressFinder::BatchVerification do
 
   describe "with an excessive concurrency level" do
     it "writes a warning message" do
-      verifier = AddressFinder::BatchVerification.new(addresses: ["address1", "address2"], concurrency: 100, http: http)
+      verifier = AddressFinder::V1::Nz::BatchVerification.new(addresses: ["address1", "address2"], concurrency: 100, http: http)
       expect(verifier).to receive(:warn).with("WARNING: Concurrency level of 100 is higher than the maximum of 5. Using 5.")
       verifier.perform
     end

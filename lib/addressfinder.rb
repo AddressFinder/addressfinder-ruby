@@ -4,7 +4,7 @@ require "concurrent/array"
 require "addressfinder/version"
 require "addressfinder/configuration"
 require "addressfinder/verification"
-require "addressfinder/batch_verification"
+require "addressfinder/v1/nz/batch_verification"
 require "addressfinder/v2/au/verification"
 require "addressfinder/v2/au/batch_verification"
 require "addressfinder/location_info"
@@ -56,12 +56,12 @@ module AddressFinder
       address_verification(args)
     end
 
-    def address_verification_batch(args = {})
-      if (args[:country] || configuration.default_country) == "au" && configuration.verification_version&.downcase == "v2"
-        AddressFinder::V2::Au::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
-      else
-        AddressFinder::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
-      end
+    def address_verification_nz_batch(args = {})
+      AddressFinder::V1::Nz::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
+    end
+
+    def address_verification_au_batch(args = {})
+      AddressFinder::V2::Au::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
     end
 
     def location_search(args = {})
