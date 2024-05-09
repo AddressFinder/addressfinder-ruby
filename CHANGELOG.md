@@ -1,3 +1,8 @@
+# Addressfinder 1.12.0 (May 2024) #
+
+* Add a batch capability with concurrency for Address Verification
+* Include a demo that shows adderss verification of a CSV file
+
 # Addressfinder 1.11.0 (May 2024) #
 
 * Add a batch capability with concurrency for Email Verification
