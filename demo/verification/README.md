@@ -29,10 +29,12 @@ You can obtain an API key by registering for a free trial account at https://add
 
 ## Example execution
 
-> `export AF_KEY=XXXXXXXXXXXXXXX`
-> `bundle exec ruby process_nz_address_csv.rb sample_addresses_nz.csv`
+Processing a CSV file of New Zealand address records:
 
 ```
+> export AF_KEY=XXXXXXXXXXXXXXX
+> export AF_SECRET=YYYYYYYYYYYYYYY
+> bundle exec ruby process_nz_address_csv.rb sample_addresses_nz.csv
 address_id,address_query,address_query_length,full_address,address_id
 1,133 wilton road wilton wellington,33,"133 Wilton Road, Wilton, Wellington 6012",2-.F.1W.v.Torm
 2,1 ghuznee st te aro wellington 6011,35,"1 Ghuznee Street, Te Aro, Wellington 6011",2-2eNwG1oBJExni2nUFJm1cW
@@ -43,9 +45,10 @@ address_id,address_query,address_query_length,full_address,address_id
 # ...
 ```
 
-> `bundle exec ruby process_au_address_csv.rb sample_addresses_au.csv`
+Processing a CSV file of Australian address records:
 
 ```
+> bundle exec ruby process_au_address_csv.rb sample_addresses_au.csv
 address_id,address_query,address_query_length,full_address,address_id
 1,"10/274 harbour drive, coffs harbour NSW 2450",44,"Unit 10, 274 Harbour Drive, COFFS HARBOUR NSW 2450",670cd8c3-b883-ee24-2874-74440e515b80
 2,"9/274 harbour drive, coffs harbour NSW 2450",43,"Unit 9, 274 Harbour Drive, COFFS HARBOUR NSW 2450",42ae5625-d679-266b-5d66-5ece6bbfb179
