@@ -4,7 +4,9 @@ require "concurrent/array"
 require "addressfinder/version"
 require "addressfinder/configuration"
 require "addressfinder/verification"
+require "addressfinder/v1/nz/batch_verification"
 require "addressfinder/v2/au/verification"
+require "addressfinder/v2/au/batch_verification"
 require "addressfinder/location_info"
 require "addressfinder/location_search"
 require "addressfinder/address_info"
@@ -22,12 +24,12 @@ module AddressFinder
   class << self
     def configure(config_hash = nil)
       config_hash&.each do |k, v|
-        if configuration.respond_to?(:"#{k}=")
-          begin
-            configuration.send(:"#{k}=", v)
-          rescue
-            nil
-          end
+        next unless configuration.respond_to?(:"#{k}=")
+
+        begin
+          configuration.send(:"#{k}=", v)
+        rescue
+          nil
         end
       end
 
@@ -38,16 +40,28 @@ module AddressFinder
       @configuration ||= AddressFinder::Configuration.new
     end
 
-    def cleanse(args = {}) # We are keeping this method for backward compatibility
-      AddressFinder::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
-    end
-
-    def verification(args = {})
+    def address_verification(args = {})
       if (args[:country] || configuration.default_country) == "au" && configuration.verification_version&.downcase == "v2"
         AddressFinder::V2::Au::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
       else
         AddressFinder::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
       end
+    end
+
+    def verification(args = {}) # We are keeping this method for backward compatibility
+      address_verification(args)
+    end
+
+    def cleanse(args = {}) # We are keeping this method for backward compatibility
+      address_verification(args)
+    end
+
+    def address_verification_nz_batch(args = {})
+      AddressFinder::V1::Nz::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
+    end
+
+    def address_verification_au_batch(args = {})
+      AddressFinder::V2::Au::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
     end
 
     def location_search(args = {})
@@ -83,7 +97,9 @@ module AddressFinder
     end
 
     def bulk(&block)
-      AddressFinder::Bulk.new(http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, default_country: configuration.default_country, &block).perform
+      AddressFinder::Bulk.new(
+        http: AddressFinder::HTTP.new(configuration), verification_version: configuration.verification_version, default_country: configuration.default_country, &block
+      ).perform
     end
   end
 end

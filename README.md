@@ -54,10 +54,14 @@ end
 For available parameters and example responses, see the API documentation pages for [New Zealand](https://addressfinder.nz/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=New%20Zealand) or [Australia](https://addressfinder.com.au/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=Australia).
 
 
-#### Address Verification
+### Address Verification
+
+#### New Zealand addresses
+
+To verify a single New Zealand address, use the following method:
 
 ```ruby
-result = AddressFinder.verification(q: '186 Willis St, Wellington', country: 'nz')
+result = AddressFinder.address_verification(q: '186 Willis St, Wellington', country: 'nz')
 
 if result
   $stdout.puts "Success: #{result.postal}"
@@ -66,9 +70,57 @@ else
 end
 ```
 
-**Note:** The deprecated method `cleanse` is still available now but will be dropped in the future.
+You can also verify a batch of New Zealand addresses using the following method. 
+We suggest that you send up to 100 addresses in each batch. 
 
-#### Address Search
+```ruby
+result = AddressFinder.address_verification_nz_batch(addresses: [
+  "186 Willis St, Wellington", 
+  "1 Ghuznee St, Te Aro, Wellington 6011"
+], concurrency: 5)
+
+if result
+  $stdout.puts "Success: #{result.postal}"
+else
+  $stdout.puts "Sorry, can't find that address"
+end
+```
+
+There is a demo of processing a CSV file of sample New Zealand address in the [/demo/batch](/demo/verification/) folder. 
+
+#### Australian addresses
+
+To verify a single Australian address, use the following method:
+
+```ruby
+result = AddressFinder.address_verification(q: '10/274 Harbour Drive, Coffs Harbour NSW 2450', gnaf: "1", country: 'au')
+
+if result
+  $stdout.puts "Success: #{result.full_address}"
+else
+  $stdout.puts "Sorry, can't find that address"
+end
+```
+
+You can also verify a batch of Australian addresses using the following method:
+We suggest that you send up to 100 addresses in each batch. 
+
+```ruby
+result = AddressFinder.address_verification_au_batch(addresses: [
+  "10/274 Harbour Drive, Coffs Harbour NSW 2450",
+  "49 CORNISH ST, COBAR NSW 2835"
+], gnaf: "1", concurrency: 5)
+
+if result
+  $stdout.puts "Success: #{result.full_address}"
+else
+  $stdout.puts "Sorry, can't find that address"
+end
+```
+
+There is a demo of processing a CSV file of sample Australian address in the [/demo/batch](/demo/verification/) folder. 
+
+### Address Search
 
 The Address Search API supports the following address sets:
 
@@ -89,7 +141,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-#### Address Autocomplete
+### Address Autocomplete
 
 The Address Autocomplete API supports the following address sets:
 
@@ -109,7 +161,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-#### Address Metadata
+### Address Metadata
 
 ```ruby
 begin
@@ -125,7 +177,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-#### Location Autocomplete
+### Location Autocomplete
 
 ```ruby
 begin
@@ -141,7 +193,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-#### Location Metadata
+### Location Metadata
 
 ```ruby
 begin
@@ -157,7 +209,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-#### Email Verification
+### Email Verification
 
 This example shows how to request verification of a single email address. 
 
@@ -191,7 +243,7 @@ end
 The emails will be verified concurrently, and returned in the same order in 
 which they were provided.
 
-#### Phone Verification
+### Phone Verification
 
 ```ruby
 begin
@@ -205,29 +257,7 @@ end
 
 ## Advanced Usage
 
-#### Bulk Operations
-
-If you have a series of API requests, you can use the
-bulk method to re-use the HTTP connection.
-
-**Note:** The bulk method is currently only available for Address Verification, Email Verification and Phone Verification (`#verification`, `#email_verification`, `#phone_verifiction`).
-
-```ruby
-AddressFinder.bulk do |af|
-  CSV.foreach('auckland_addresses.csv') do |row|
-    result = af.verification(q: row[0], region_code: '1')
-
-    if result
-      $stdout.puts "Success: #{result.postal}"
-    else
-      $stdout.puts "Sorry, can't find that address"
-    end
-  end
-end
-```
-
-
-#### Key and Secret override
+### Key and Secret override
 
 What if you want to use another account for a specific query? You can override the `api_key` and `api_secret`.
 
@@ -245,7 +275,7 @@ rescue AddressFinder::RequestRejectedError => e
 end
 ```
 
-### Testing
+## Testing
 
 You can run all the specs with the following command:
 

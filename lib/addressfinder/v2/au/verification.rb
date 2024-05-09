@@ -1,10 +1,9 @@
-require 'ostruct'
+require "ostruct"
 
 module AddressFinder
   module V2
     module Au
       class Verification
-
         attr_reader :result
 
         # V2 AU expected attributes:
@@ -19,21 +18,22 @@ module AddressFinder
         # params[:gps] --> nil or '1',
         # params[:extended] --> nil or '1',
         # params[:state_codes] --> string or array of strings: i.e.,['ACT', 'NSW'],
-        def initialize(q:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil, gps: nil, state_codes: nil, extended: nil, http:, country: nil)
+        def initialize(q:, http:, post_box: nil, census: nil, domain: nil, key: nil, secret: nil, paf: nil, gnaf: nil,
+          gps: nil, state_codes: nil, extended: nil, country: nil)
           @params = {}
-          @params['q'] = q
-          @params['post_box'] = post_box if post_box
-          @params['census'] = census if census
-          @params['domain'] = domain || config.domain if (domain || config.domain)
-          @params['key'] = key || config.api_key
-          @params['secret'] = secret || config.api_secret
-          @params['paf'] = paf if paf
-          @params['gnaf'] = gnaf if gnaf
-          @params['gps'] = gps if gps
-          @params['extended'] = extended if extended
-          @params['state_codes'] = state_codes if state_codes
+          @params["q"] = q
+          @params["post_box"] = post_box if post_box
+          @params["census"] = census if census
+          @params["domain"] = domain || config.domain if domain || config.domain
+          @params["key"] = key || config.api_key
+          @params["secret"] = secret || config.api_secret
+          @params["paf"] = paf if paf
+          @params["gnaf"] = gnaf if gnaf
+          @params["gps"] = gps if gps
+          @params["extended"] = extended if extended
+          @params["state_codes"] = state_codes if state_codes
 
-          @params['format'] = 'json'
+          @params["format"] = "json"
           @http = http
         end
 
@@ -65,14 +65,10 @@ module AddressFinder
         end
 
         def build_result
-          if response_status != '200'
-            raise AddressFinder::RequestRejectedError.new(@response_status, @response_body)
-          end
+          raise AddressFinder::RequestRejectedError.new(@response_status, @response_body) if response_status != "200"
 
-          if response_hash['matched']
-            self.result = Result.new(response_hash['address'] || response_hash)
-          else
-            self.result = nil
+          self.result = if response_hash["matched"]
+            Result.new(response_hash["address"] || response_hash)
           end
         end
 
@@ -92,5 +88,5 @@ module AddressFinder
         end
       end
     end
-end
+  end
 end
