@@ -86,6 +86,8 @@ else
 end
 ```
 
+There is a demo of processing a CSV file of sample New Zealand address in the [/demo/batch](/demo/verification/) folder. 
+
 #### Australian addresses
 
 To verify a single Australian address, use the following method:
@@ -115,6 +117,8 @@ else
   $stdout.puts "Sorry, can't find that address"
 end
 ```
+
+There is a demo of processing a CSV file of sample Australian address in the [/demo/batch](/demo/verification/) folder. 
 
 ### Address Search
 
