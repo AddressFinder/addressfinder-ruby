@@ -61,10 +61,10 @@ For available parameters and example responses, see the API documentation pages 
 To verify a single New Zealand address, use the following method:
 
 ```ruby
-result = AddressFinder.address_verification(q: '186 Willis St, Wellington', country: 'nz')
+result = AddressFinder.address_verification(q: "186 Willis St, Wellington", country: "nz")
 
 if result
-  $stdout.puts "Success: #{result.postal}"
+  $stdout.puts "Success: '#{result.a}'"
 else
   $stdout.puts "Sorry, can't find that address"
 end
@@ -74,15 +74,16 @@ You can also verify a batch of New Zealand addresses using the following method.
 We suggest that you send up to 100 addresses in each batch. 
 
 ```ruby
-result = AddressFinder.address_verification_nz_batch(addresses: [
-  "186 Willis St, Wellington", 
-  "1 Ghuznee St, Te Aro, Wellington 6011"
-], concurrency: 5)
+addresses = ["186 Willis St, Wellington", "1 Ghuznee St, Te Aro, Wellington 6011", "bad address"]
 
-if result
-  $stdout.puts "Success: #{result.postal}"
-else
-  $stdout.puts "Sorry, can't find that address"
+results = AddressFinder.address_verification_nz_batch(addresses: addresses, concurrency: 10)
+
+results.each_with_index do |result, index|
+  if result
+    $stdout.puts "Success: matched '#{addresses[index]}' with '#{result.a}'"
+  else
+    $stdout.puts "Sorry, can't find address: '#{addresses[index]}'"
+  end
 end
 ```
 
@@ -106,15 +107,16 @@ You can also verify a batch of Australian addresses using the following method:
 We suggest that you send up to 100 addresses in each batch. 
 
 ```ruby
-result = AddressFinder.address_verification_au_batch(addresses: [
-  "10/274 Harbour Drive, Coffs Harbour NSW 2450",
-  "49 CORNISH ST, COBAR NSW 2835"
-], gnaf: "1", concurrency: 5)
+addresses = ["10/274 Harbour Drive, Coffs Harbour NSW 2450", "49 CORNISH ST, COBAR NSW 2835", "bad address"]
 
-if result
-  $stdout.puts "Success: #{result.full_address}"
-else
-  $stdout.puts "Sorry, can't find that address"
+results = AddressFinder.address_verification_au_batch(addresses: addresses, concurrency: 10)
+
+results.each_with_index do |result, index|
+  if result
+    $stdout.puts "Success: matched '#{addresses[index]}' with '#{result.a}'"
+  else
+    $stdout.puts "Sorry, can't find address: '#{addresses[index]}'"
+  end
 end
 ```
 
