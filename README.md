@@ -109,7 +109,7 @@ We suggest that you send up to 100 addresses in each batch.
 ```ruby
 addresses = ["10/274 Harbour Drive, Coffs Harbour NSW 2450", "49 CORNISH ST, COBAR NSW 2835", "bad address"]
 
-results = AddressFinder.address_verification_au_batch(addresses: addresses, concurrency: 10)
+results = AddressFinder.address_verification_au_batch(addresses: addresses, gnaf: "1", concurrency: 10)
 
 results.each_with_index do |result, index|
   if result
