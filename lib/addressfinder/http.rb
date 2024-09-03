@@ -15,11 +15,16 @@ module AddressFinder
       end
     end
 
-    def request(args)
+    def request(request_uri)
+      raise ArgumentError, "request_uri is nil" if request_uri.nil?
       retries = 0
       begin
         re_establish_connection if @connection_is_bad
-        net_http.request(args)
+
+        uri = build_uri(request_uri)
+        request = Net::HTTP::Get.new(uri)
+
+        net_http.request(request)
       rescue Net::ReadTimeout, Net::OpenTimeout, SocketError => error
         if retries < config.retries
           retries += 1
@@ -38,6 +43,19 @@ module AddressFinder
       @connection_is_bad = false
       net_http.finish
       net_http.start
+    end
+
+    def build_uri(request_uri)
+      uri = URI(request_uri)
+      encoded_ca = URI.encode_www_form_component(config.ca)
+
+      if uri.query
+        uri.query += "&ca=#{encoded_ca}"
+      else
+        uri.query = "ca=#{encoded_ca}"
+      end
+
+      uri.to_s
     end
 
     def net_http

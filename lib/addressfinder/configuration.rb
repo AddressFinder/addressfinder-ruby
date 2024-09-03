@@ -15,6 +15,8 @@ module AddressFinder
     attr_accessor :retries
     attr_accessor :retry_delay
 
+    attr_reader :ca
+
     def initialize
       self.hostname = 'api.addressfinder.io'
       self.port = 443
@@ -23,6 +25,13 @@ module AddressFinder
       self.retry_delay = 5
       self.default_country = 'nz'
       self.verification_version = 'v1'
+      self.ca = "Ruby/#{AddressFinder::VERSION}"
+    end
+
+    private
+
+    def ca=(value)
+      @ca = value
     end
   end
 end

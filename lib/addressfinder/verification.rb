@@ -61,9 +61,7 @@ module AddressFinder
     end
 
     def execute_request
-      request = Net::HTTP::Get.new(request_uri)
-
-      response = http.request(request)
+      response = http.request(request_uri)
 
       self.response_body = response.body
       self.response_status = response.code

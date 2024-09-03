@@ -31,7 +31,8 @@ RSpec.describe AddressFinder do
       end
 
       it "safely passes arguments through" do
-        stub_request(:get, Addressable::Template.new("https://api.addressfinder.io/api/nz/address/verification{?args*}")).to_return(:status => 200, :body => "{}", :headers => {})
+        nz_verification_endpoint = "https://api.addressfinder.io/api/nz/address/verification"
+        stub_request(:get, /\A#{nz_verification_endpoint}/).to_return(:status => 200, :body => "{}", :headers => {})
         subject
       end
     end
@@ -44,7 +45,8 @@ RSpec.describe AddressFinder do
       end
 
       it "safely passes arguments through" do
-        stub_request(:get, Addressable::Template.new("https://api.addressfinder.io/api/au/address/v2/verification{?args*}")).to_return(:status => 200, :body => "{}", :headers => {})
+        au_verification_endpoint = "https://api.addressfinder.io/api/au/address/v2/verification"
+        stub_request(:get, /\A#{au_verification_endpoint}/).to_return(:status => 200, :body => "{}", :headers => {})
         subject
       end
     end
