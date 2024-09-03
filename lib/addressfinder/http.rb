@@ -16,7 +16,6 @@ module AddressFinder
     end
 
     def request(request_uri)
-      raise ArgumentError, "request_uri is nil" if request_uri.nil?
       retries = 0
       begin
         re_establish_connection if @connection_is_bad
