@@ -1,3 +1,7 @@
+# Addressfinder 1.13.0 (September 2024) #
+
+* Add client agent versioning
+
 # Addressfinder 1.12.0 (May 2024) #
 
 * Add a batch capability with concurrency for Address Verification
