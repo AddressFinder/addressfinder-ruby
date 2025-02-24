@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.7'
   gem.add_dependency 'multi_json', '~> 1.15'
   gem.add_dependency "concurrent-ruby", "~> 1.2"
+  gem.add_dependency 'ostruct', '> 0.6'
 
   gem.add_development_dependency 'guard-rspec', '~> 4.7'
   gem.add_development_dependency 'listen', '~> 3.7'
