@@ -1,3 +1,7 @@
+# Addressfinder 1.14.0 (February 2025) #
+
+* Add support for Ruby 3.4
+
 # Addressfinder 1.13.0 (September 2024) #
 
 * Add client agent versioning
