@@ -1,3 +1,7 @@
+# Addressfinder 1.15.0 (March 2025) #
+
+* Automatically skip empty strings within Bulk verification
+
 # Addressfinder 1.14.0 (February 2025) #
 
 * Add support for Ruby 3.4
