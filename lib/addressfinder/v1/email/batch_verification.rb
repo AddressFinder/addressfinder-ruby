@@ -47,7 +47,7 @@ module AddressFinder
           @emails.each_with_index do |email, index_of_email|
             # Start a new thread for each task
             pool.post do
-              verify_email(email, index_of_email)
+              @results[index_of_email] = verify_email(email)
             end
           end
 
@@ -57,11 +57,12 @@ module AddressFinder
         end
 
         # Verifies a single email addresses, and writes the result into @results
-        def verify_email(email, index_of_email)
-          @results[index_of_email] =
-            AddressFinder::V1::Email::Verification.new(email: email, http: http.clone, **args).perform.result
+        def verify_email(email)
+          return if email.empty?
+
+          AddressFinder::V1::Email::Verification.new(email: email, http: http.clone, **args).perform.result
         rescue AddressFinder::RequestRejectedError => e
-          @results[index_of_email] = OpenStruct.new(success: false, body: e.body, status: e.status)
+          OpenStruct.new(success: false, body: e.body, status: e.status)
         end
       end
     end

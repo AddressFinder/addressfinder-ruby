@@ -48,7 +48,7 @@ module AddressFinder
           addresses.each_with_index do |address, index_of_address|
             # Start a new thread for each task
             pool.post do
-              verify_address(address, index_of_address)
+              @results[index_of_address] = verify_address(address)
             end
           end
 
@@ -58,11 +58,12 @@ module AddressFinder
         end
 
         # Verifies a single address, and writes the result into @results
-        def verify_address(address, index_of_address)
-          @results[index_of_address] =
-            AddressFinder::V2::Au::Verification.new(q: address, http: http.clone, **args).perform.result
+        def verify_address(address)
+          return if address.empty?
+
+          AddressFinder::V2::Au::Verification.new(q: address, http: http.clone, **args).perform.result
         rescue AddressFinder::RequestRejectedError => e
-          @results[index_of_address] = OpenStruct.new(success: false, body: e.body, status: e.status)
+          OpenStruct.new(success: false, body: e.body, status: e.status)
         end
       end
     end
