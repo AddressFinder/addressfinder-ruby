@@ -1,7 +1,7 @@
 # Addressfinder Ruby Gem
 
 [![Gem Version](https://badge.fury.io/rb/addressfinder.svg)](http://badge.fury.io/rb/addressfinder)
-[![Build  Status](https://travis-ci.com/github/AddressFinder/addressfinder-ruby.svg)](https://travis-ci.com/github/AddressFinder/addressfinder-ruby)
+[![Build  Status](https://github.com/AddressFinder/addressfinder-ruby/actions/workflows/ruby/badge.svg)](https://github.com/AddressFinder/addressfinder-ruby/actions/workflows/ruby/badge.svg)
 
 A client library for accessing the [Addressfinder](https://addressfinder.nz/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder) APIs.
 
