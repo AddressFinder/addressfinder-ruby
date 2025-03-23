@@ -61,7 +61,7 @@ module AddressFinder
         def verify_address(address)
           return if address.empty?
 
-          AddressFinder::Verification.new(q: address, http: http.clone, **args).perform.result
+          AddressFinder::Verification.new(q: address, http: http.clone, **args).perform.result || false
         rescue AddressFinder::RequestRejectedError => e
           OpenStruct.new(success: false, body: e.body, status: e.status)
         end
