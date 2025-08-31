@@ -1,3 +1,7 @@
+# Unreleased (September 2025) #
+
+* Don't enforce ssl as part of Net::HTTP configuration
+
 # Addressfinder 1.15.0 (March 2025) #
 
 * Automatically skip empty strings within Batch verification

@@ -64,7 +64,7 @@ module AddressFinder
                              config.proxy_password)
         http.open_timeout = config.timeout
         http.read_timeout = config.timeout
-        http.use_ssl = true
+        http.use_ssl = config.port == 443
         http
       end
     end
