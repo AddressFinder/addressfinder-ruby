@@ -2,6 +2,7 @@
 
 * Add CGI as dependency for Ruby 3.5+
 * Add batch capability to Phone Numbers verification
+* Don't enforce ssl as part of Net::HTTP configuration
 
 # Addressfinder 1.15.0 (March 2025) #
 
