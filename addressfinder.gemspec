@@ -16,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec|features)/})
   gem.require_paths = ["lib"]
 
+<<<<<<< Updated upstream
   gem.required_ruby_version = '~> 2.1'
   gem.add_dependency 'multi_json', '~> 1.11'
   gem.add_development_dependency 'rspec', '~> 3.3'
@@ -23,4 +24,20 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'webmock', '~> 1.21'
   gem.add_development_dependency 'listen', '~> 3.2'
+=======
+  gem.required_ruby_version = '>= 2.7'
+  gem.add_dependency 'multi_json', '~> 1.15'
+  gem.add_dependency "concurrent-ruby", "~> 1.2"
+  gem.add_dependency 'ostruct', '> 0.6'
+  gem.add_dependency 'cgi', '~> 0.5'
+
+
+  gem.add_development_dependency 'guard-rspec', '~> 4.7'
+  gem.add_development_dependency 'listen', '~> 3.7'
+  gem.add_development_dependency 'rake', '~> 13.0'
+  gem.add_development_dependency 'rspec', '~> 3.11'
+  gem.add_development_dependency 'webmock', '~> 3.25'
+  gem.add_development_dependency 'debug', '>= 1.0.0'
+  gem.add_development_dependency 'standard', '>= 1.35'
+>>>>>>> Stashed changes
 end
