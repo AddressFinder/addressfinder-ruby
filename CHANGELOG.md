@@ -1,4 +1,4 @@
-# Unreleased (September 2025) #
+# Addressfinder 1.16.0 (September 2025) #
 
 * Add CGI as dependency for Ruby 3.5+
 * Add batch capability to Phone Numbers verification
