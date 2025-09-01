@@ -16,6 +16,7 @@ require "addressfinder/bulk"
 require "addressfinder/v1/email/verification"
 require "addressfinder/v1/email/batch_verification"
 require "addressfinder/v1/phone/verification"
+require "addressfinder/v1/phone/batch_verification"
 require "addressfinder/errors"
 require "addressfinder/util"
 require "addressfinder/http"
@@ -94,6 +95,10 @@ module AddressFinder
 
     def phone_verification(args = {})
       AddressFinder::V1::Phone::Verification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.result
+    end
+
+    def phone_verification_batch(args = {})
+      AddressFinder::V1::Phone::BatchVerification.new(**args.merge(http: AddressFinder::HTTP.new(configuration))).perform.results
     end
 
     def bulk(&block)
