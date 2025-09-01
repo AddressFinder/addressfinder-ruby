@@ -1,3 +1,7 @@
+# Unreleased (September 2025) #
+
+* Add CGI as dependency for Ruby 3.5+
+
 # Addressfinder 1.15.0 (March 2025) #
 
 * Automatically skip empty strings within Batch verification
