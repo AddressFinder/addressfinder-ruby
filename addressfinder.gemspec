@@ -20,12 +20,15 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'multi_json', '~> 1.15'
   gem.add_dependency "concurrent-ruby", "~> 1.2"
   gem.add_dependency 'ostruct', '> 0.6'
+  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.5")
+    gem.add_dependency "cgi", "~> 0.5"
+  end
 
   gem.add_development_dependency 'guard-rspec', '~> 4.7'
   gem.add_development_dependency 'listen', '~> 3.7'
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'rspec', '~> 3.11'
-  gem.add_development_dependency 'webmock', '~> 1.21'
+  gem.add_development_dependency 'webmock', '~> 3.25'
   gem.add_development_dependency 'debug', '>= 1.0.0'
   gem.add_development_dependency 'standard', '>= 1.35'
 end
