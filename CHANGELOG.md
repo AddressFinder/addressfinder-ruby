@@ -1,11 +1,12 @@
 # Unreleased (September 2025) #
 
 * Add CGI as dependency for Ruby 3.5+
+* Add batch capability to Phone Numbers verification
 
 # Addressfinder 1.15.0 (March 2025) #
 
 * Automatically skip empty strings within Batch verification
-* Mark unverified addressses as false within Batch verification
+* Mark unverified addresses as false within Batch verification
 
 # Addressfinder 1.14.0 (February 2025) #
 
