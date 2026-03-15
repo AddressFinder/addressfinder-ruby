@@ -12,7 +12,7 @@ module AddressFinder
     # params[:delivered] --> '0', '1', or nil,
     # params[:post_box] --> '0', '1', or nil,
     # params[:rural] --> '0', '1', or nil,
-    # params[:region_code] --> string, see options on addressfinder.nz or nil,
+    # params[:region_code] --> string, see options on addressfinder.com or nil,
     # params[:census] --> '2013', '2018' or nil
 
     # Combined attributes
