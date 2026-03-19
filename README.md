@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/addressfinder.svg)](http://badge.fury.io/rb/addressfinder)
 [![Build Status](https://github.com/addressfinder/addressfinder-ruby/actions/workflows/ruby.yml/badge.svg?branch=master)](https://github.com/addressfinder/addressfinder-ruby/actions/workflows/ruby.yml/badge.svg?branch=master)
 
-A client library for accessing the [Addressfinder](https://addressfinder.nz/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder) APIs.
+A client library for accessing the [Addressfinder](https://addressfinder.com/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder) APIs.
 
 ## Installation
 
@@ -44,14 +44,14 @@ end
 ```
 
 **_Don't know your key and secret?_**
-*Login to the [Addressfinder portal](https://portal.addressfinder.io/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder%20Portal) to obtain your key and secret.*
+*Login to the [Addressfinder portal](https://portal.addressfinder.net/?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=AddressFinder%20Portal) to obtain your key and secret.*
 
 **_For Ruby on Rails:_**
 *The configure block is best placed in an initializer file (`./config/initializers/addressfinder.rb`).*
 
 ## Usage
 
-For available parameters and example responses, see the API documentation pages for [New Zealand](https://addressfinder.nz/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=New%20Zealand) or [Australia](https://addressfinder.com.au/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=Australia).
+For available parameters and example responses, see the [API documentation](https://addressfinder.com/docs?utm_source=github&utm_medium=readme&utm_campaign=addressfinder_rubygem&utm_term=Docs).
 
 
 ### Address Verification
