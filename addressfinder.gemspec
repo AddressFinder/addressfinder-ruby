@@ -17,7 +17,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.required_ruby_version = '>= 2.7'
-  gem.add_dependency 'multi_json', '~> 1.15'
   gem.add_dependency "concurrent-ruby", "~> 1.2"
   gem.add_dependency 'ostruct', '> 0.6'
   if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.5")
