@@ -80,7 +80,7 @@ module AddressFinder
     end
 
     def response_hash
-      @_response_hash ||= MultiJson.load(response_body)
+      @_response_hash ||= JSON.parse(response_body)
     end
 
     def config

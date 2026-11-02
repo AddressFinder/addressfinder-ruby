@@ -1,4 +1,4 @@
-require "multi_json"
+require "json"
 require "concurrent/executor/fixed_thread_pool"
 require "concurrent/array"
 require "addressfinder/version"
